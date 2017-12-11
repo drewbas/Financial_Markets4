@@ -1,0 +1,17 @@
+base
+RColorBrewer
+knitr
+forecast
+bitops
+RCurl
+XML
+XMLSchema
+SSOAP
+zoo
+xts
+highcharter
+tidyr
+ggplot2
+termstrc
+rgl
+YieldCurve

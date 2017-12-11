@@ -1,0 +1,16 @@
+base
+RevoUtilsMath
+RColorBrewer
+knitr
+zoo
+xts
+TTR
+quantmod
+bitops
+RCurl
+XML
+rusquant
+forecast
+highcharter
+tidyr
+ggplot2

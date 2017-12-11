@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Салихов Марсель (marcel.salikhov@gmail.com)" />
+  <meta name="date" content="2017-01-17" />
+  <meta name="copyright" content="НИУ ВШЭ. Салихов Марсель (marcel.salikhov@gmail.com)"/>
+  <title>ARCH/GARCH модели   Количественные финансы</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link href="libs/slidy-2/styles/slidy.css" rel="stylesheet" />
+  <script src="libs/slidy-2/scripts/slidy.js"></script>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="styles.css" />
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">ARCH/GARCH модели <br> “Количественные финансы”</h1>
+  <p class="author">
+Салихов Марсель (<a href="mailto:marcel.salikhov@gmail.com">marcel.salikhov@gmail.com</a>)
+  </p>
+  <p class="date">2017-01-17</p>
+</div>
+<div id="-" class="slide section level2">
+<h1>Цели лекции</h1>
+<ul>
+<li>понять, что такое волатильность и как ее можно оценивать</li>
+<li>понять основные принципы моделей авторегрессионной условной гетероскедастичности (ARCH)</li>
+<li>научиться тестировать “ARCH-эффект” в R</li>
+<li>научиться симулировать ARCH-модели</li>
+<li>научиться оценивать ARCH-модели на финансовых данных в R c помощью пакетов fGarch и rugarch</li>
+<li>понять отличия ARCH и GARCH моделей</li>
+<li>научиться строить прогнозы для GARCH моделей</li>
+</ul>
+</div>
+<div id="--arma-" class="slide section level2">
+<h1>Выводы по ARMA-моделям</h1>
+<p>Напоминание из прошлой лекции:</p>
+<ul>
+<li>Мы используем PACF для определения примерного порядка AR-моделей (последний значимый лаг на PACF определяет порядок модели - <span class="math inline">\(p\)</span>)</li>
+<li>Мы используем ACF для определения ориентировочного порядка MA-моделей (последний значимый лаг на АСF определяет порядок модели - <span class="math inline">\(q\)</span>).</li>
+<li>Информационные критерии (AIC, BIC) часто используются для выбора оптимальной модели ARMA. Эти критерии “штрафуют” модели за сложность (количество оцениваемых параметров)</li>
+<li>ARMA модели позволяют использовать меньше параметров, чем AR или MA по отдельности</li>
+<li><strong>Все ARMA модели не позволяют моделировать меняющуюся во времени волатильность</strong>. Поэтому они в принципе не могут моделировать кластеризацию волатильности. В ARMA моделях условная дисперсия является постоянной.</li>
+</ul>
+</div>
+<div class="slide section level2">
+<h1>Волатильность</h1>
+<ul>
+<li>Волатильность – важное понятие в финансах, так как является синонимом понятия риск.</li>
+<li>Волатильность не наблюдаема. Поэтому мы используем различные прокси для оценки волатильности.</li>
+<li>Волатильность имеет широкое использование в различных приложениях:
+<ul>
+<li><strong>Ценообразование опционов</strong>. В модели Black-Scholes стоимость опционов зависит напрямую от волатильности базового актива.</li>
+<li><strong>Риск-менеджмент</strong>. Волатильность используется при расчете показателей VaR (Value at Risk), ES (Expected Shortfall), показателя Шарпа (Sharpe Ratio) и других стандартных параметров риск-менеджмента.</li>
+<li><strong>Торгуемые финансовые инструменты</strong>. Волатильность можно торговать напрямую (к примеру, фьючерсы VIX и связанные с ними ETF), но все еще экзотика для России (на Московской Бирже торгуются фьючерcы на индексы волатильности RVI).</li>
+</ul></li>
+</ul>
+<p><strong>Итог</strong>: если мы умеем прогнозировать волатильность, то мы можем более аккуратно оценивать стоимость опционов, создавать более продвинутые системы риск-менеджмента и можем создавать стратегии для торговли волатильностью.</p>
+</div>
+<div id="--ch" class="slide section level2">
+<h1>Условная гетероскедастичность (CH)</h1>
+<ul>
+<li>Мы говорим, что набор элементов (к примеру, части временного ряда) является <strong>гетероскедастичным</strong>, если определенные подгруппы этих элементов имеют разную дисперсию.</li>
+</ul>
+<p>К примеру, если нестационарный временной ряд имеет выраженную сезонность или устойчивый тренд, то дисперсия ряда изменяется вместе с сезонностью или трендом. Такая регулярность приводит к гетероскедастичности ряда. Почему?</p>
+<p>Однако структура рынка и поведение участников приводит к дополнительным причинам, почему увеличение дисперсии приводит к еще большему увеличению дисперсии в реальной жизни. К примеру, если большое количество участников использует стратегию “защиты” портфеля от снижения стоимости, то падение рынка приводит к автоматическим продажам и росту спросу на инструменты “защиты” (опционы) – то есть, к росту волатильности.</p>
+<ul>
+<li>Если гетероскедастичность имеет автокорреляцию, то есть <strong>условна</strong> в зависимости от периода роста волатильности, тогда наблюдается <strong>условная гетероскедастичность</strong>.</li>
+</ul>
+</div>
+<div id="--" class="slide section level2">
+<h1>Волатильность для акций</h1>
+<p>Пусть мы оцениваем волатильность акций Роснефти. Мы можем оценить волатильность по разным данным: 1) дневная доходность акций за каждый торговый день 2) внутридневная динамика торгов 3) стоимость опционов на акции Роснефти (если они есть). Эти три источника дают три возможных оценки волатильности:</p>
+<ul>
+<li><strong>Волатильность как условное стандартное отклонение ежедневных доходностей</strong>. Это стандартное определение волатильности, которое мы будем использовать сегодня.</li>
+<li><strong>Подразумевая волатильность (implied volatility)</strong>. Используя рыночные цены опционов и одну из моделей ценообразования опционов (к примеру, Black-Scholes), мы можем оценить волатильность. Однако это оценка зависит от модели, которую вы используете для определения цены опциона.</li>
+<li><strong>Реализованная волатильность</strong>. Если у вас есть high frequency данные, вы можете оценивать внутридневную волатильность доходностей. К примеру, вы можете использовать, 5 минутные промежутки времени, для того, чтобы оценить дневную волатильность.</li>
+</ul>
+<p>Обычно волатильность сообщается на годовом уровне (% в год). Если вы оценили дневную волатильность, то вы можете оценить годовую волатильность, умножим ее на <span class="math inline">\(\sqrt{252}\)</span>, то есть квадратный корень из количества торговых дней в году (примерно равно 16)</p>
+</div>
+<div id="--" class="slide section level2">
+<h1>Идентификация условной гетероскедастичности</h1>
+<ul>
+<li>Эффект условной гетероскедастичности сложно оценить по корелограммам.</li>
+<li>Можно использовать модели волатильности, такие как ARCH или GARCH.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot.xts</span>(MICEX.rtn, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>,<span class="dt">main  =</span> <span class="st">&#39;Доходность индекса ММВБ&#39;</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-1-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(MICEX.rtn) <span class="co"># тестируем среднее доходнстей</span></code></pre></div>
+<pre><code>
+    One Sample t-test
+
+data:  MICEX.rtn
+t = 1.8344, df = 4249, p-value = 0.06666
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ -0.0000409118  0.0012312515
+sample estimates:
+   mean of x 
+0.0005951699 </code></pre>
+<p>Cудя по t-тесту, мы отклоняем гипотезу о том, что среднее доходности равно 0.</p>
+</div>
+<div id="autoregressive-conditional-heteroskedastic-arch-" class="slide section level2">
+<h1>AutoRegressive Conditional Heteroskedastic (ARCH) модель</h1>
+<ul>
+<li>Мы знаем, что модели ARMA не позволяют моделировать CH-эффект. Однако почему не попробовать моделировать ** условную дисперсию** серии с помощью модели ARMA? Это и есть базовый принцип ARCH.</li>
+</ul>
+<p>Пусть временной ряд <span class="math inline">\({\epsilon_t}\)</span> имеет следующий вид:</p>
+<p><span class="math display">\[ \epsilon_t = \sigma_t w_t \]</span> где <span class="math inline">\(w_t\)</span> – белый шум с нулевым средним и единичной дисперсией (белый шум может иметь нормальное распределение, но это не обязательно, распределение может быть и иным).Часть <span class="math inline">\(\sigma_t\)</span> – условная дисперсия (<strong>conditional variance</strong>), она имеет вид:</p>
+<p><span class="math display">\[\sigma_t^2 = a_0 + a_1 \epsilon_{t-1}^2 \]</span> <span class="math inline">\(a_0\)</span> и <span class="math inline">\(a_1\)</span> – это параметры модели, которые необходимо оценить.</p>
+<p>Условная дисперсия ряда по определению равно <span class="math inline">\(\sigma_t^2 = Var(\epsilon_t | e_{t-1}, \ldots)\)</span> ;</p>
+<p>В этом случае ряд <span class="math inline">\({\epsilon_t}\)</span> является процессом ARCH(1). Можно записать модель в следующем виде:</p>
+<p><span class="math display">\[\epsilon_t = w_t \sqrt{a_0 + a_1 \epsilon_{t-1}^2} \]</span> <span class="math inline">\(a_0 &gt;0\)</span> и <span class="math inline">\(a_1 &gt; 0\)</span> для того, чтобы часть под корнем была больше 0.</p>
+<p><span class="math inline">\(a_0 + a_1&lt;1\)</span> для того, чтобы ряд оставался стационарным с конечной дисперсией.</p>
+</div>
+<div id="-arch--" class="slide section level2">
+<h1>Почему ARCH моделирует волатильность?</h1>
+<p>Немного математики:</p>
+<p><span class="math display">\[ Var(\epsilon_t) = E[\epsilon_t^2] - (E[\epsilon_t])^2 = E[\epsilon_t^2] =E[w_t^2]E[a_0 + a_1 \epsilon_{t-1}^2]= \]</span> <span class="math display">\[=E[a_0 + a_1 \epsilon_{t-1}^2]  = a_0 + a_1 Var(\epsilon_{t-1}) = a_0 + a_1 \epsilon_{t-1}^2 \]</span></p>
+<p>учитывая, что среднее <span class="math inline">\(w_t\)</span> равно 0, дисперсия – 1, а $E[_t] = 0 $</p>
+<ul>
+<li><strong>Дисперсия ARCH(1) модели является AR(1)-процессом</strong>.</li>
+</ul>
+</div>
+<div id="---arch" class="slide section level2">
+<h1>Когда можно использовать ARCH?</h1>
+<ul>
+<li>Мы использовали корелограмму доходностей для идентификации AR(1)-процесса. Точно также можно использовать корелограмму <strong>квадратов доходностей</strong> для идентификации ARCH</li>
+<li>ARCH необходимо использовать, если вы уже подобрали адекватную модель, которая “оставляет” после себя остатки, более или менее похожие на белый шум. То есть, сначала необходимо определить модель для среднего доходностей, а потом моделировать дисперсию.<br />
+</li>
+<li>ARCH не имеет смысла использовать для серий, которые имеют сезонные и/или трендовые эффекты. Сначала “уберите” сезонность/тренд с помощью ARIMA (SARIMA), экзогенных регрессоров, а после этого оценивайте ARCH.</li>
+</ul>
+</div>
+<div id="---arch" class="slide section level2">
+<h1>Достоинства и недостатки ARCH</h1>
+<p>Достоинства:</p>
+<ol style="list-style-type: decimal">
+<li>Модель может “создавать” кластеры волатильности</li>
+<li>Модель может “создавать” heavy tails</li>
+</ol>
+<p>Недостатки:</p>
+<ol style="list-style-type: decimal">
+<li>Модель трактует положительные и отрицательные шоки одинаковым образом с точки зрения влияния на волатильность. Эмпирические наблюдения и здравый смысл говорят, что эти шоки различны.</li>
+<li>Модель ARCH накладывает достаточно сильные ограничения на значения коэффициентов модели. Это ограничивает возможности моделировать более высокие моменты (к примеру, избыточный эксцесс).</li>
+<li>Модель ARCH не дает возможность оценки источников шоков, это просто механистический способ оценки поведения условной дисперсии.</li>
+<li>Модель ARCH недооценивает волатильность, так как достаточно медленно реагирует на большие по значению шоки.</li>
+<li>Модель на фактических требует достаточно большого количество параметров для оценки, что увеличивает вероятность overfitting.</li>
+</ol>
+</div>
+<div id="archp" class="slide section level2">
+<h1>ARCH(p)</h1>
+<p>Модель ARCH порядка <span class="math inline">\(p\)</span> имеет следующий вид:</p>
+<p><span class="math display">\[\sigma_t^2 = w_t \sqrt{a_0 + \sum_{i=1}^{p} a_i \epsilon_{t-i}^2} \]</span></p>
+<ul>
+<li>Модель ARCH(p) – это моделирование дисперсии ряда как AR(p).</li>
+</ul>
+</div>
+<div id="-arch-" class="slide section level2">
+<h1>Тестирование ARCH-эффекта</h1>
+<p>Пусть уравнение для среднего выглядит следующим образом: <span class="math inline">\(a_t = r + \mu_t\)</span>. Мы можем использовать квадраты остатков (<span class="math inline">\(a_t^2\)</span>), чтобы проверить серию на условную гетерокседастичность (ARCH-эффект). Есть два варианта тестирования ARCH-эффекта:</p>
+<ol style="list-style-type: decimal">
+<li>Использовать тест Льюнга-Бокса (Ljung-Box test) для серии <span class="math inline">\(\{a_t^2\}\)</span> – мы проходили этот тест в ARMA-моделях</li>
+<li>Использовать тест множителей Лагранжа (см <em>Engle (1982)</em>). Этот тест эквивалентен обычному F-тесту на тестирование гипотезы (<span class="math inline">\(\alpha_i = 0\)</span>) в уравнении:</li>
+</ol>
+<p><span class="math display">\[ a_t^2 = \alpha _0 + \alpha_1 a_{t-1}^2 +\ldots + \alpha_{t-m}^2 + \epsilon_t, t = m +1, ..., T \]</span> Код теста LM для R:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">&quot;archTest&quot;</span> &lt;-<span class="st"> </span>function(rtn,<span class="dt">m=</span><span class="dv">10</span>){
+<span class="co">#  Провести тест множителей Лагранжа для оценки ARCH-эффекта в ряде </span>
+<span class="co"># rtn: серия доходностей</span>
+<span class="co"># m: порядок AR</span>
+<span class="co">#</span>
+y=(rtn-<span class="kw">mean</span>(rtn))^<span class="dv">2</span>
+T=<span class="kw">length</span>(rtn)
+atsq=y[(m<span class="dv">+1</span>):T]
+x=<span class="kw">matrix</span>(<span class="dv">0</span>,(T-m),m)
+for (i in <span class="dv">1</span>:m){
+x[,i]=y[(m<span class="dv">+1</span>-i):(T-i)]
+}
+md=<span class="kw">lm</span>(atsq~x)
+<span class="kw">summary</span>(md)
+}</code></pre></div>
+</div>
+<div id="-arch-----" class="slide section level2">
+<h1>Проверка ARCH-эффекта для доходностей индекса ММВБ</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span>MICEX.rtn -<span class="st"> </span><span class="kw">mean</span>(MICEX.rtn)
+<span class="kw">Box.test</span>(y^<span class="dv">2</span>,<span class="dt">lag=</span><span class="dv">10</span>,<span class="dt">type=</span><span class="st">&#39;Ljung&#39;</span>)</code></pre></div>
+<pre><code>
+    Box-Ljung test
+
+data:  y^2
+X-squared = 1452, df = 10, p-value &lt; 2.2e-16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">archTest</span>(y,<span class="dv">12</span>) </code></pre></div>
+<pre><code>
+Call:
+lm(formula = atsq ~ x)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.016831 -0.000253 -0.000115  0.000069  0.048325 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  1.107e-04  2.629e-05   4.211 2.60e-05 ***
+x1           4.571e-02  1.535e-02   2.978  0.00292 ** 
+x2           3.571e-01  1.439e-02  24.818  &lt; 2e-16 ***
+x3           7.927e-02  1.539e-02   5.152 2.69e-07 ***
+x4          -1.165e-01  1.523e-02  -7.648 2.52e-14 ***
+x5           7.674e-03  1.533e-02   0.501  0.61661    
+x6           2.338e-02  1.513e-02   1.545  0.12242    
+x7           1.552e-01  1.513e-02  10.257  &lt; 2e-16 ***
+x8           2.204e-02  1.531e-02   1.440  0.15005    
+x9          -1.613e-01  1.521e-02 -10.603  &lt; 2e-16 ***
+x10          4.769e-02  1.535e-02   3.107  0.00190 ** 
+x11          3.502e-01  1.436e-02  24.383  &lt; 2e-16 ***
+x12         -6.341e-02  1.530e-02  -4.144 3.48e-05 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.001538 on 4225 degrees of freedom
+Multiple R-squared:  0.2869,    Adjusted R-squared:  0.2849 
+F-statistic: 141.6 on 12 and 4225 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Оба теста указывают на присутствие ARCH-эффекта в серии</p>
+</div>
+<div id="--arch-" class="slide section level2">
+<h1>Определение порядка ARCH модели</h1>
+<ul>
+<li>Мы можем использовать PACF квадратов доходностей, чтобы оценить порядок ARCH модели.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pacf</span>(y^<span class="dv">2</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-4-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>Можем оценить ARMA(1,1) модель для среднего доходностей и посмотреть на квадраты остатков этой модели:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">arma11 &lt;-<span class="st"> </span><span class="kw">Arima</span>(MICEX.rtn, <span class="dt">order=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))
+<span class="kw">Pacf</span>(<span class="kw">resid</span>(arma11)^<span class="dv">2</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>Как видно, требуется достаточно много лагов (порядок модели), чтобы использовать ARCH.</p>
+</div>
+<div id="-ar1-arch1" class="slide section level2">
+<h1>Симулирование AR(1) + ARCH(1)</h1>
+<p>AR(1) модель для среднего и ARCH(1) для дисперсии можно симулировать следующим образом:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n =<span class="st"> </span><span class="dv">10200</span> <span class="co">#</span>
+e =<span class="st"> </span><span class="kw">rnorm</span>(n)
+a =<span class="st"> </span>e <span class="co"># ARCH</span>
+y =<span class="st"> </span>e <span class="co"># AR + ARCH</span>
+sig2 =<span class="st"> </span>e^<span class="dv">2</span> <span class="co"># условная дисперсия</span>
+<span class="co"># параметры для ARCH</span>
+omega =<span class="st"> </span><span class="dv">1</span>
+alpha =<span class="st"> </span><span class="fl">0.55</span>
+<span class="co">#параметры для AR</span>
+phi =<span class="st"> </span><span class="fl">0.8</span>
+mu =<span class="st"> </span><span class="fl">0.1</span>
+omega/(<span class="dv">1</span>-alpha) <span class="co"># безусловное ст. отклонение</span></code></pre></div>
+<pre><code>[1] 2.222222</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sqrt</span>(omega/(<span class="dv">1</span>-alpha))</code></pre></div>
+<pre><code>[1] 1.490712</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="st">&quot;1234&quot;</span>)
+for (t in <span class="dv">2</span>:n)
+{
+  a[t] =<span class="st"> </span><span class="kw">sqrt</span>(sig2[t])*e[t]
+  y[t] =<span class="st"> </span>mu +<span class="st"> </span>phi*(y[t<span class="dv">-1</span>]-mu) +<span class="st"> </span>a[t] <span class="co"># моделирование AR</span>
+  sig2[t<span class="dv">+1</span>] =<span class="st"> </span>omega +<span class="st"> </span>alpha *<span class="st"> </span>a[t]^<span class="dv">2</span> <span class="co"># моделирование ARCH</span>
+}
+
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>))
+<span class="kw">plot</span>(e[<span class="dv">10001</span>:n],<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">xlab=</span><span class="st">&quot;t&quot;</span>,<span class="dt">ylab=</span><span class="kw">expression</span>(epsilon),<span class="dt">main=</span><span class="st">&quot;(a) белый шум&quot;</span>)
+<span class="kw">plot</span>(<span class="kw">sqrt</span>(sig2[<span class="dv">10001</span>:n]),<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">xlab=</span><span class="st">&quot;t&quot;</span>,<span class="dt">ylab=</span><span class="kw">expression</span>(sigma[t]),
+     <span class="dt">main=</span><span class="st">&quot;(b) условная дисперсия&quot;</span>)
+<span class="kw">plot</span>(a[<span class="dv">10001</span>:n],<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">xlab=</span><span class="st">&quot;t&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;a&quot;</span>,<span class="dt">main=</span><span class="st">&quot;(c) ARCH&quot;</span>)
+<span class="kw">plot</span>(y[<span class="dv">10001</span>:n],<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">xlab=</span><span class="st">&quot;t&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;y&quot;</span>,<span class="dt">main=</span><span class="st">&quot;(d) AR+ARCH&quot;</span>)
+<span class="kw">acf</span>(a[<span class="dv">10001</span>:n],<span class="dt">main=</span><span class="st">&quot;(e) ARCH&quot;</span>)
+<span class="kw">acf</span>(a[<span class="dv">10001</span>:n]^<span class="dv">2</span>,<span class="dt">main=</span><span class="st">&quot;(f) ARCH squared&quot;</span>)
+<span class="kw">acf</span>(y[<span class="dv">10001</span>:n],<span class="dt">main=</span><span class="st">&quot;(g) AR+ARCH&quot;</span>)
+<span class="kw">acf</span>(y[<span class="dv">10001</span>:n]^<span class="dv">2</span>,<span class="dt">main=</span><span class="st">&quot;(h) AR+ARCH squared&quot;</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
+</div>
+<div id="-arch-" class="slide section level2">
+<h1>Оценка ARCH-модели</h1>
+<p>Оценим ARCH(1)-модель для доходностей ММВБ при допущении о том, что среднее доходностей является константой. Используем помощью функцию <code>garchFit</code> из пакета <code>fGarch</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fGarch)
+arch1 &lt;-<span class="st"> </span><span class="kw">garchFit</span>(~<span class="dv">1</span>+<span class="kw">garch</span>(<span class="dv">1</span>,<span class="dv">0</span>),<span class="dt">data=</span>MICEX.rtn,<span class="dt">trace=</span>F)
+<span class="kw">summary</span>(arch1)</code></pre></div>
+<pre><code>
+Title:
+ GARCH Modelling 
+
+Call:
+ garchFit(formula = ~1 + garch(1, 0), data = MICEX.rtn, trace = F) 
+
+Mean and Variance Equation:
+ data ~ 1 + garch(1, 0)
+&lt;environment: 0x000000001708d520&gt;
+ [data = MICEX.rtn]
+
+Conditional Distribution:
+ norm 
+
+Coefficient(s):
+        mu       omega      alpha1  
+0.00108073  0.00027966  0.43871658  
+
+Std. Errors:
+ based on Hessian 
+
+Error Analysis:
+        Estimate  Std. Error  t value Pr(&gt;|t|)    
+mu     1.081e-03   2.776e-04    3.893 9.89e-05 ***
+omega  2.797e-04   8.435e-06   33.156  &lt; 2e-16 ***
+alpha1 4.387e-01   3.413e-02   12.855  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Log Likelihood:
+ 10663.13    normalized:  2.508971 
+
+Description:
+ Tue Jan 17 14:16:29 2017 by user: m_salihov 
+
+
+Standardised Residuals Tests:
+                                Statistic p-Value  
+ Jarque-Bera Test   R    Chi^2  9191.952  0        
+ Shapiro-Wilk Test  R    W      0.930257  0        
+ Ljung-Box Test     R    Q(10)  15.15729  0.1264317
+ Ljung-Box Test     R    Q(15)  20.58548  0.1506043
+ Ljung-Box Test     R    Q(20)  30.55795  0.0613033
+ Ljung-Box Test     R^2  Q(10)  431.5183  0        
+ Ljung-Box Test     R^2  Q(15)  992.2737  0        
+ Ljung-Box Test     R^2  Q(20)  1222.767  0        
+ LM Arch Test       R    TR^2   400.9497  0        
+
+Information Criterion Statistics:
+      AIC       BIC       SIC      HQIC 
+-5.016530 -5.012045 -5.016531 -5.014945 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res  &lt;-<span class="st"> </span><span class="kw">residuals</span>(arch1,<span class="dt">standardize=</span>T) <span class="co"># используем стандартизированные остатки для диагностики модели </span>
+<span class="kw">Acf</span>(res,<span class="dt">lag=</span><span class="dv">20</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pacf</span>(res,<span class="dt">lag=</span><span class="dv">20</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-7-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># plot(arch1) диагностические графики для модели </span>
+<span class="kw">plot</span>(arch1, <span class="dt">which =</span> <span class="dv">13</span>) <span class="co"># QQ-Plot of Standardized Residuals   </span></code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-7-3.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>Оцененная модель имеет вид:</p>
+<p><span class="math display">\[ r_t = 0.001197 + a_t, \sigma^2 = 0.0002589 + 0.455 a_{t-1}^2 \]</span> Все коэффициенты являются значимыми. ACF и PACF указывают на отсутствие автокорреляции в остатках</p>
+</div>
+<div id="-arch1-c----" class="slide section level2">
+<h1>Оценка ARCH(1) c распределением Стьюдента для шоков</h1>
+<p>Та же самая модель с t-распределением Стьюдента для моделирования шоков серии.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">arch1_student &lt;-<span class="st"> </span><span class="kw">garchFit</span>(~<span class="dv">1</span>+<span class="kw">garch</span>(<span class="dv">1</span>,<span class="dv">0</span>),<span class="dt">data=</span>MICEX.rtn,<span class="dt">trace=</span>F, <span class="dt">cond.dist=</span><span class="st">&quot;std&quot;</span>)
+<span class="kw">summary</span>(arch1_student)</code></pre></div>
+<pre><code>
+Title:
+ GARCH Modelling 
+
+Call:
+ garchFit(formula = ~1 + garch(1, 0), data = MICEX.rtn, cond.dist = &quot;std&quot;, 
+    trace = F) 
+
+Mean and Variance Equation:
+ data ~ 1 + garch(1, 0)
+&lt;environment: 0x0000000011e04978&gt;
+ [data = MICEX.rtn]
+
+Conditional Distribution:
+ std 
+
+Coefficient(s):
+       mu      omega     alpha1      shape  
+0.0012965  0.0003078  0.3874822  3.4959352  
+
+Std. Errors:
+ based on Hessian 
+
+Error Analysis:
+        Estimate  Std. Error  t value Pr(&gt;|t|)    
+mu     1.297e-03   2.319e-04    5.591 2.25e-08 ***
+omega  3.078e-04   2.021e-05   15.233  &lt; 2e-16 ***
+alpha1 3.875e-01   4.904e-02    7.901 2.66e-15 ***
+shape  3.496e+00   2.021e-01   17.296  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Log Likelihood:
+ 11074.94    normalized:  2.605869 
+
+Description:
+ Tue Jan 17 14:16:31 2017 by user: m_salihov 
+
+
+Standardised Residuals Tests:
+                                Statistic p-Value   
+ Jarque-Bera Test   R    Chi^2  9808.465  0         
+ Shapiro-Wilk Test  R    W      0.9294886 0         
+ Ljung-Box Test     R    Q(10)  16.13634  0.0957955 
+ Ljung-Box Test     R    Q(15)  22.06267  0.1061712 
+ Ljung-Box Test     R    Q(20)  32.86854  0.03487833
+ Ljung-Box Test     R^2  Q(10)  486.3402  0         
+ Ljung-Box Test     R^2  Q(15)  1120.37   0         
+ Ljung-Box Test     R^2  Q(20)  1374.302  0         
+ LM Arch Test       R    TR^2   448.8563  0         
+
+Information Criterion Statistics:
+      AIC       BIC       SIC      HQIC 
+-5.209855 -5.203874 -5.209857 -5.207741 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res  &lt;-<span class="st"> </span><span class="kw">residuals</span>(arch1_student,<span class="dt">standardize=</span>T) <span class="co"># используем стандартизированные остатки</span>
+<span class="kw">Acf</span>(res,<span class="dt">lag=</span><span class="dv">20</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-8-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pacf</span>(res,<span class="dt">lag=</span><span class="dv">20</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-8-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(arch1_student, <span class="dt">which =</span> <span class="dv">13</span>) <span class="co"># QQ-Plot of Standardized Residuals   </span></code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-8-3.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>Использование распределения с более “тяжелыми хвостами” несколько уменьшило значение ARCH-коэффициента. График квантиль-квантиль также подтверждает, что использование распределения Стьюдента для шоков, приводит к более “нормальным” остаткам модели</p>
+</div>
+<div id="-garch" class="slide section level2">
+<h1>Определение GARCH</h1>
+<ul>
+<li>Если мы используем AR-модель для дисперсии, почему не использовать и MA-модель? Это и есть основа <strong>GARCH</strong>.</li>
+</ul>
+<p>Временной ряд <span class="math inline">\({\epsilon_t}\)</span> имеет следующий вид:</p>
+<p><span class="math display">\[ \epsilon_t = \sigma_t w_t \]</span></p>
+<p>где <span class="math inline">\(w_t\)</span> – белый шум с нулевым средним и единичной дисперсией, а часть <span class="math inline">\(\sigma_t^2\)</span> имеет вид:</p>
+<p><span class="math display">\[\sigma_t^2 = a_0 +\sum_{i=1}^{q} a_i \epsilon_{t-i}^2+ \sum_{j=1}^{p} \beta_i \sigma_{t-j}^2  \]</span> где <span class="math inline">\(\alpha_i\)</span> и <span class="math inline">\(\beta_j\)</span> – это параметры модели.</p>
+<ul>
+<li><strong>GARCH – это ARMA-процесс для дисперсии серии</strong>.</li>
+</ul>
+</div>
+<div id="-garch11" class="slide section level2">
+<h1>Симулирование GARCH(1,1)</h1>
+<p>GARCH(1,1) будет иметь следующий вид: <span class="math display">\[\epsilon_t = \sigma_t w_t \]</span> <span class="math display">\[a_0 + a_1 \epsilon_{t-1}^2 + \beta_1 \sigma_{t-1}^2 \]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2</span>)
+a0 &lt;-<span class="st"> </span><span class="fl">0.2</span>
+a1 &lt;-<span class="st"> </span><span class="fl">0.5</span>
+b1 &lt;-<span class="st"> </span><span class="fl">0.3</span>
+w &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">10000</span>) ## белый шум
+eps &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">10000</span>) ## исходный ряд
+sigsq &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">10000</span>) ## компонента GARCH
+for (i in <span class="dv">2</span>:<span class="dv">10000</span>) {
+   sigsq[i] &lt;-<span class="st"> </span>a0 +<span class="st"> </span>a1 *<span class="st"> </span>(eps[i<span class="dv">-1</span>]^<span class="dv">2</span>) +<span class="st"> </span>b1 *<span class="st"> </span>sigsq[i<span class="dv">-1</span>]
+   eps[i] &lt;-<span class="st"> </span>w[i]*<span class="kw">sqrt</span>(sigsq[i])
+}
+
+<span class="kw">plot</span>(eps, <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-9-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<ul>
+<li>построим корелограмму получившегося ряда</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Acf</span>(eps)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-10-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>вроде бы ничего необычного. Но если мы построим корелограмму квадратов рядов, то увидим выраженное убывание на последующих лагах (характеристика AR-процесса)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Acf</span>(eps^<span class="dv">2</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-11-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pacf</span>(eps^<span class="dv">2</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-11-2.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="--garch11-" class="slide section level2">
+<h1>Оценка симулированной GARCH(1,1)-модели</h1>
+<p>Мы можем также использовать функцию <code>garch</code> из пакета <code>tseries</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tseries)
+eps.garch &lt;-<span class="st"> </span><span class="kw">garch</span>(eps, <span class="dt">trace=</span><span class="ot">FALSE</span>)
+<span class="kw">summary</span>(eps.garch)</code></pre></div>
+<pre><code>
+Call:
+garch(x = eps, trace = FALSE)
+
+Model:
+GARCH(1,1)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-4.11672 -0.66558  0.01997  0.68409  3.53687 
+
+Coefficient(s):
+    Estimate  Std. Error  t value Pr(&gt;|t|)    
+a0  0.197947    0.009858    20.08   &lt;2e-16 ***
+a1  0.465840    0.019720    23.62   &lt;2e-16 ***
+b1  0.323213    0.018907    17.09   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Diagnostic Tests:
+    Jarque Bera Test
+
+data:  Residuals
+X-squared = 0.40598, df = 2, p-value = 0.8163
+
+
+    Box-Ljung test
+
+data:  Squared.Residuals
+X-squared = 0.49885, df = 1, p-value = 0.48</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">confint</span>(eps.garch)</code></pre></div>
+<pre><code>       2.5 %    97.5 %
+a0 0.1786255 0.2172683
+a1 0.4271900 0.5044903
+b1 0.2861566 0.3602687</code></pre>
+<ul>
+<li>Коэффициенты отличаются значимым образом от 0.</li>
+<li>Доверительные интервалы включат “настоящие” значения коэффициентов</li>
+</ul>
+</div>
+<div id="-garch11---" class="slide section level2">
+<h1>Оценка GARCH(1,1) для индекса ММВБ</h1>
+<p>Оценим GARCH(1,1) при допущении о том, что среднее доходностей является константой:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(fGarch)
+garch11 &lt;-<span class="st"> </span><span class="kw">garchFit</span>(~<span class="dv">1</span>+<span class="kw">garch</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="dt">data=</span>MICEX.rtn,<span class="dt">trace=</span>F) <span class="co"># часть ~1 говорит о том, что надо оценивать константу</span>
+<span class="kw">summary</span>(garch11)</code></pre></div>
+<pre><code>
+Title:
+ GARCH Modelling 
+
+Call:
+ garchFit(formula = ~1 + garch(1, 1), data = MICEX.rtn, trace = F) 
+
+Mean and Variance Equation:
+ data ~ 1 + garch(1, 1)
+&lt;environment: 0x0000000011296980&gt;
+ [data = MICEX.rtn]
+
+Conditional Distribution:
+ norm 
+
+Coefficient(s):
+        mu       omega      alpha1       beta1  
+1.0400e-03  6.7353e-06  1.0004e-01  8.8368e-01  
+
+Std. Errors:
+ based on Hessian 
+
+Error Analysis:
+        Estimate  Std. Error  t value Pr(&gt;|t|)    
+mu     1.040e-03   2.272e-04    4.578 4.69e-06 ***
+omega  6.735e-06   1.094e-06    6.155 7.51e-10 ***
+alpha1 1.000e-01   9.713e-03   10.300  &lt; 2e-16 ***
+beta1  8.837e-01   1.048e-02   84.348  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Log Likelihood:
+ 11267.35    normalized:  2.651142 
+
+Description:
+ Tue Jan 17 14:16:33 2017 by user: m_salihov 
+
+
+Standardised Residuals Tests:
+                                Statistic p-Value  
+ Jarque-Bera Test   R    Chi^2  3709.351  0        
+ Shapiro-Wilk Test  R    W      0.9738593 0        
+ Ljung-Box Test     R    Q(10)  15.06431  0.1297349
+ Ljung-Box Test     R    Q(15)  16.25624  0.3652293
+ Ljung-Box Test     R    Q(20)  21.77415  0.3528903
+ Ljung-Box Test     R^2  Q(10)  5.152836  0.8807372
+ Ljung-Box Test     R^2  Q(15)  6.962369  0.9586856
+ Ljung-Box Test     R^2  Q(20)  8.93627   0.9836337
+ LM Arch Test       R    TR^2   5.977409  0.9172166
+
+Information Criterion Statistics:
+      AIC       BIC       SIC      HQIC 
+-5.300402 -5.294421 -5.300403 -5.298288 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(garch11)</code></pre></div>
+<pre><code>          mu        omega       alpha1        beta1 
+1.039966e-03 6.735277e-06 1.000442e-01 8.836801e-01 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">v11=<span class="kw">volatility</span>(garch11)*<span class="kw">sqrt</span>(<span class="dv">252</span>)*<span class="dv">100</span>
+<span class="kw">plot</span>(<span class="kw">index</span>(MICEX.rtn), v11,<span class="dt">type=</span><span class="st">&#39;l&#39;</span>, <span class="dt">xlab=</span> <span class="st">&#39;год&#39;</span>,<span class="dt">ylab=</span><span class="st">&#39;% год&#39;</span>, <span class="dt">main =</span> <span class="st">&#39;Оценка волатильности индекса ММВБ на основе GARCH(1,1) модели&#39;</span>) </code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-13-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>Мы можем также использовать критерии AIC/BIC для выбора лучшей GARCH модели</p>
+</div>
+<div id="---" class="slide section level2">
+<h1>Варианты для моделей доходностей</h1>
+<p>Мы используем только одну серию для моделирования – серию фактических доходностей. Модель GARCH раскладывает эту серию на три части:</p>
+<ol style="list-style-type: decimal">
+<li>Среднее арифметическое доходности в момент <span class="math inline">\(t\)</span></li>
+<li>Условная дисперсия в момент времени <span class="math inline">\(t\)</span></li>
+<li>Шок в момент времени <span class="math inline">\(t\)</span>.</li>
+</ol>
+<p>Мы можем использовать разные подходы для оценки среднего доходностей (часть 1):</p>
+<ul>
+<li>ноль</li>
+<li>константа (которую нужно оценить)</li>
+<li>простая авторегрессионная модель – к примеру, AR(1)</li>
+<li>ARMA модель</li>
+<li>что-то другое.</li>
+</ul>
+<p>Спецификация модели GARCH позволяется определить каким образом, рассчитываются части 2 и 3.</p>
+</div>
+<div id="-garch11--arma-" class="slide section level2">
+<h1>Оценка GARCH(1,1) с ARMA-моделью</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_best &lt;-<span class="st"> </span><span class="kw">auto.arima</span>(MICEX.rtn)
+<span class="kw">summary</span>(fit_best)</code></pre></div>
+<pre><code>Series: MICEX.rtn 
+ARIMA(3,0,2) with non-zero mean 
+
+Coefficients:
+          ar1      ar2      ar3     ma1     ma2  intercept
+      -0.8511  -0.3536  -0.0523  0.8912  0.3466      6e-04
+s.e.   0.2829   0.2716   0.0232  0.2834  0.2875      3e-04
+
+sigma^2 estimated as 0.0004451:  log likelihood=10371.49
+AIC=-20728.98   AICc=-20728.95   BIC=-20684.5
+
+Training set error measures:
+                        ME       RMSE        MAE MPE MAPE      MASE
+Training set -1.731055e-06 0.02108294 0.01404814 NaN  Inf 0.7039994
+                      ACF1
+Training set -0.0002569637</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">garch_best &lt;-<span class="st"> </span><span class="kw">garchFit</span>(~<span class="st"> </span><span class="kw">arma</span>(<span class="dv">3</span>,<span class="dv">3</span>)+<span class="st"> </span><span class="kw">garch</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">data=</span>MICEX.rtn,
+                       <span class="dt">trace =</span> F, <span class="dt">inclue.mean =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>Warning in arima(.series$x, order = c(u, 0, v), include.mean =
+include.mean): possible convergence problem: optim gave code = 1</code></pre>
+<p>Предупреждение указывает на то, что оптимизатор не смог найти значения коэффициентов. Поэтому текущие значения коэффициентов не имеют большого смысла.</p>
+</div>
+<div id="-garch11-arma33-------rugarch" class="slide section level2">
+<h1>Оценка GARCH(1,1) + ARMA(3,3) для доходностей индекса ММВБ с помощью rugarch</h1>
+<p>попробуем использовать пакет <code>rugarch</code>. В этом пакете сначала необходимо создать объект, определяющиий тип оцениваемой модели, с помощью функции <code>ugarchspec</code>. Функция <code>ugarchfit</code> уже оценивает непосредственно модель. Для сложных моделей оценка может занимать определенное время.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(rugarch)
+spec =<span class="st"> </span><span class="kw">ugarchspec</span>(
+                 <span class="dt">variance.model=</span><span class="kw">list</span>(<span class="dt">garchOrder=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)),
+                 <span class="dt">mean.model=</span><span class="kw">list</span>(<span class="dt">armaOrder=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>), <span class="dt">include.mean=</span>T),
+                 <span class="dt">distribution.model=</span><span class="st">&quot;sged&quot;</span>)
+
+fit =<span class="st"> </span><span class="kw">tryCatch</span>(
+       <span class="kw">ugarchfit</span>(
+         spec, MICEX.rtn, <span class="dt">solver =</span> <span class="st">&#39;hybrid&#39;</span>
+       ), <span class="dt">error=</span>function(e) e, <span class="dt">warning=</span>function(w) w
+     )
+(fit)</code></pre></div>
+<pre><code>
+*---------------------------------*
+*          GARCH Model Fit        *
+*---------------------------------*
+
+Conditional Variance Dynamics   
+-----------------------------------
+GARCH Model : sGARCH(1,1)
+Mean Model  : ARFIMA(3,0,3)
+Distribution    : sged 
+
+Optimal Parameters
+------------------------------------
+        Estimate  Std. Error   t value Pr(&gt;|t|)
+mu      0.000761    0.000189   4.02011 0.000058
+ar1    -0.515701    0.033874 -15.22413 0.000000
+ar2     0.005637    0.052377   0.10763 0.914288
+ar3     0.263324    0.058597   4.49382 0.000007
+ma1     0.526879    0.033474  15.73982 0.000000
+ma2    -0.047153    0.053818  -0.87616 0.380940
+ma3    -0.295119    0.057603  -5.12328 0.000000
+omega   0.000004    0.000002   2.46183 0.013823
+alpha1  0.085417    0.010231   8.34890 0.000000
+beta1   0.904155    0.011174  80.91337 0.000000
+skew    0.925635    0.016971  54.54225 0.000000
+shape   1.368671    0.038295  35.74009 0.000000
+
+Robust Standard Errors:
+        Estimate  Std. Error   t value Pr(&gt;|t|)
+mu      0.000761    0.000186   4.08447 0.000044
+ar1    -0.515701    0.007367 -69.99780 0.000000
+ar2     0.005637    0.011945   0.47194 0.636969
+ar3     0.263324    0.015819  16.64639 0.000000
+ma1     0.526879    0.006663  79.08027 0.000000
+ma2    -0.047153    0.017232  -2.73632 0.006213
+ma3    -0.295119    0.017508 -16.85630 0.000000
+omega   0.000004    0.000005   0.85052 0.395035
+alpha1  0.085417    0.017290   4.94037 0.000001
+beta1   0.904155    0.023603  38.30714 0.000000
+skew    0.925635    0.017712  52.25971 0.000000
+shape   1.368671    0.061640  22.20409 0.000000
+
+LogLikelihood : 11388.17 
+
+Information Criteria
+------------------------------------
+                    
+Akaike       -5.3535
+Bayes        -5.3356
+Shibata      -5.3535
+Hannan-Quinn -5.3472
+
+Weighted Ljung-Box Test on Standardized Residuals
+------------------------------------
+                         statistic  p-value
+Lag[1]                       6.721 0.009527
+Lag[2*(p+q)+(p+q)-1][17]    15.077 0.000000
+Lag[4*(p+q)+(p+q)-1][29]    20.274 0.043659
+d.o.f=6
+H0 : No serial correlation
+
+Weighted Ljung-Box Test on Standardized Squared Residuals
+------------------------------------
+                        statistic p-value
+Lag[1]                      0.162  0.6873
+Lag[2*(p+q)+(p+q)-1][5]     4.021  0.2514
+Lag[4*(p+q)+(p+q)-1][9]     4.670  0.4794
+d.o.f=2
+
+Weighted ARCH LM Tests
+------------------------------------
+            Statistic Shape Scale P-Value
+ARCH Lag[3]     1.032 0.500 2.000  0.3097
+ARCH Lag[5]     1.041 1.440 1.667  0.7207
+ARCH Lag[7]     1.155 2.315 1.543  0.8871
+
+Nyblom stability test
+------------------------------------
+Joint Statistic:  4.8262
+Individual Statistics:              
+mu     1.16335
+ar1    0.48891
+ar2    0.03752
+ar3    0.05288
+ma1    0.46686
+ma2    0.04248
+ma3    0.05123
+omega  0.28474
+alpha1 1.00237
+beta1  0.93812
+skew   0.35838
+shape  0.10665
+
+Asymptotic Critical Values (10% 5% 1%)
+Joint Statistic:         2.69 2.96 3.51
+Individual Statistic:    0.35 0.47 0.75
+
+Sign Bias Test
+------------------------------------
+                   t-value    prob sig
+Sign Bias           1.0993 0.27168    
+Negative Sign Bias  0.1132 0.90985    
+Positive Sign Bias  1.2811 0.20023    
+Joint Effect        7.3000 0.06293   *
+
+
+Adjusted Pearson Goodness-of-Fit Test:
+------------------------------------
+  group statistic p-value(g-1)
+1    20     29.07      0.06492
+2    30     41.52      0.06192
+3    40     61.12      0.01333
+4    50     54.87      0.26186
+
+
+Elapsed time : 4.092 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#plot(fit)</span>
+resid &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit, <span class="dt">standardize =</span> <span class="ot">TRUE</span>)
+<span class="kw">Acf</span>(resid)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-15-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pacf</span>(resid)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-15-2.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">v33 &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">252</span>) *<span class="st"> </span>fit@fit$sigma*<span class="dv">100</span>
+<span class="kw">head</span>(v33)</code></pre></div>
+<pre><code>[1] 33.50780 33.50780 33.50780 32.19111 31.05571 41.78705</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">sqrt</span>(<span class="dv">252</span>) *<span class="st"> </span>fit@fit$sigma, <span class="dt">type=</span><span class="st">&#39;l&#39;</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-15-3.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fit, <span class="dt">which =</span> <span class="dv">1</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-15-4.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="--garch---" class="slide section level2">
+<h1>Сравнение оценок GARCH разных моделей среднего</h1>
+<p>сравним оценку волатильности доходностей индекс ММВБ двух разных моделей:</p>
+<ol style="list-style-type: decimal">
+<li>GARCH(1,1) + константа для доходностей</li>
+<li>GARCH(1,1)+ARMA(3,3)</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">index</span>(MICEX.rtn),v11,<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">xlab=</span> <span class="st">&#39;год&#39;</span>, <span class="dt">ylab =</span> <span class="st">&#39;% ujl&#39;</span>)
+<span class="kw">lines</span>(<span class="kw">index</span>(MICEX.rtn),v33,<span class="dt">col=</span><span class="st">&quot;green&quot;</span>)</code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-16-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>Оценки модели очень близки друг к другу.</p>
+</div>
+<div id="---garch" class="slide section level2">
+<h1>Прогнозирование с помощью GARCH</h1>
+<p>GARCH модели позволяют строить прогнозы исходной серии и прогнозы для волатильности:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fcst =<span class="st"> </span><span class="kw">ugarchforecast</span>(fit, <span class="dt">n.ahead=</span><span class="dv">10</span>)
+<span class="kw">plot</span>(fcst, <span class="dt">which =</span> <span class="dv">1</span>) <span class="co"># прогноз для ряда</span></code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-17-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(fcst, <span class="dt">which =</span> <span class="dv">3</span>) <span class="co"># прогноз для волатильности</span></code></pre></div>
+<p><img src="lecture-6_files/figure-slidy/unnamed-chunk-17-2.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="-" class="slide section level2">
+<h1>Использованные источники:</h1>
+<ol style="list-style-type: decimal">
+<li>“An Introduction to Analysis of Financial Data with R” (Ruey S. Tsay)</li>
+<li>“Statistics and Data Analysis for Financial Engineering” (David Ruppert &amp; David Matteson)</li>
+<li>Analyzing Financial Data and Implementing Financial Models Using R (Clifford Ang)</li>
+<li>Forecasting Financial Time Series (Patrick Perry)</li>
+<li>Generalised Autoregressive Conditional Heteroskedasticity GARCH(p, q) Models for Time Series Analysis (Michael Halls-Moore)</li>
+</ol>
+</div>
+
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+</body>
+</html>

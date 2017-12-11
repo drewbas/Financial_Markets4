@@ -1,0 +1,14 @@
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.rdb
+*.rdx
+*(1).*
+*[Конфликт].*
+books
+hse
+codes
+coursera
+ppt
+manuals
