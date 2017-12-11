@@ -25,7 +25,7 @@ output:
 
 library("RColorBrewer")    # brewer.pal
 library("knitr")           # opts_chunk
-library(rusquant)
+library(QuantTools)
 library(forecast)
 
 
@@ -81,7 +81,7 @@ load('../.RData')
 + На прошлой лекции мы рассмотрели авторегрессионные (AR) модели. В конечном счете мы пришли к тому, что AR-модели для настоящих финансовых данных требуют слишком большого количества параметров для оценки и приводят к "подгонке" (overfitting).
 + MA-модели *схожи* с AR-моделями, однако в отличие от них модель представляет собой не линейную комбинацию прошлых значений, а линейную комбинацию прошлых компонент белого шума. 
 + МA-модель "видит" случайные шоки белого шума непосредственно для каждого текущего значения серии. AR-модель же "видит" шоки косвенным образом, через регрессирование к своим предыдущим значениям. 
-+ Однако MA-модель порядка $q$ видит последние q шоков, в то время как AR(p) модель будет учитывать все предыдущие шоки с последовательным убыванием. 
++ Однако MA-модель порядка $q$ "видит"" последние q шоков, в то время как AR(p) модель будет учитывать все предыдущие шоки с последовательным убыванием. 
 
 
 ## Определение MA-модели 
@@ -177,7 +177,7 @@ confint(x.ma)
 
 ```{r}
 ma1 <- arima.sim(n=1000, model=list(ma=c(0.5)))
-ma1 <- arima.sim(n=1000, model=list(ma=c(0.5, -0.3)))
+ma2 <- arima.sim(n=1000, model=list(ma=c(0.5, -0.3)))
 par(mfrow=c(1,2))
 Acf(ma1, na.action = na.omit)
 Acf(ma2, na.action = na.omit)
@@ -373,26 +373,26 @@ confint(arima(x, order=c(2, 0, 2)))
 
 ```{r,cache=TRUE }
 # без константы (сводобного члена)
-fit.00 <- Arima(diff.log.MICEX, c(0, 0, 0), include.constant=FALSE)
-fit.01 <- Arima(diff.log.MICEX, c(0, 0, 1), include.constant=FALSE)
-fit.02 <- Arima(diff.log.MICEX, c(0, 0, 2), include.constant=FALSE)
-fit.10 <- Arima(diff.log.MICEX, c(1, 0, 0), include.constant=FALSE)
-fit.11 <- Arima(diff.log.MICEX, c(1, 0, 1), include.constant=FALSE)
-fit.12 <- Arima(diff.log.MICEX, c(1, 0, 2), include.constant=FALSE)
-fit.20 <- Arima(diff.log.MICEX, c(2, 0, 0), include.constant=FALSE)
-fit.21 <- Arima(diff.log.MICEX, c(2, 0, 1), include.constant=FALSE)
-fit.22 <- Arima(diff.log.MICEX, c(2, 0, 2), include.constant=FALSE)
+fit.00 <- Arima(diff.log.MICEX, c(0, 0, 0), include.drift=FALSE)
+fit.01 <- Arima(diff.log.MICEX, c(0, 0, 1), include.drift=FALSE)
+fit.02 <- Arima(diff.log.MICEX, c(0, 0, 2), include.drift=FALSE)
+fit.10 <- Arima(diff.log.MICEX, c(1, 0, 0), include.drift=FALSE)
+fit.11 <- Arima(diff.log.MICEX, c(1, 0, 1), include.drift=FALSE)
+fit.12 <- Arima(diff.log.MICEX, c(1, 0, 2), include.drift=FALSE)
+fit.20 <- Arima(diff.log.MICEX, c(2, 0, 0), include.drift=FALSE)
+fit.21 <- Arima(diff.log.MICEX, c(2, 0, 1), include.drift=FALSE)
+fit.22 <- Arima(diff.log.MICEX, c(2, 0, 2), include.drift=FALSE)
 
 # с константой 
-fit.00c <- Arima(diff.log.MICEX, c(0, 0, 0), include.constant=TRUE)
-fit.01c <- Arima(diff.log.MICEX, c(0, 0, 1), include.constant=TRUE)
-fit.02c <- Arima(diff.log.MICEX, c(0, 0, 2), include.constant=TRUE)
-fit.10c <- Arima(diff.log.MICEX, c(1, 0, 0), include.constant=TRUE)
-fit.11c <- Arima(diff.log.MICEX, c(1, 0, 1), include.constant=TRUE)
-fit.12c <- Arima(diff.log.MICEX, c(1, 0, 2), include.constant=TRUE)
-fit.20c <- Arima(diff.log.MICEX, c(2, 0, 0), include.constant=TRUE)
-fit.21c <- Arima(diff.log.MICEX, c(2, 0, 1), include.constant=TRUE)
-fit.22c <- Arima(diff.log.MICEX, c(2, 0, 2), include.constant=TRUE)
+fit.00c <- Arima(diff.log.MICEX, c(0, 0, 0), include.drift=TRUE)
+fit.01c <- Arima(diff.log.MICEX, c(0, 0, 1), include.drift=TRUE)
+fit.02c <- Arima(diff.log.MICEX, c(0, 0, 2), include.drift=TRUE)
+fit.10c <- Arima(diff.log.MICEX, c(1, 0, 0), include.drift=TRUE)
+fit.11c <- Arima(diff.log.MICEX, c(1, 0, 1), include.drift=TRUE)
+fit.12c <- Arima(diff.log.MICEX, c(1, 0, 2), include.drift=TRUE)
+fit.20c <- Arima(diff.log.MICEX, c(2, 0, 0), include.drift=TRUE)
+fit.21c <- Arima(diff.log.MICEX, c(2, 0, 1), include.drift=TRUE)
+fit.22c <- Arima(diff.log.MICEX, c(2, 0, 2), include.drift=TRUE)
 
 ```
 
@@ -402,7 +402,7 @@ fit.22c <- Arima(diff.log.MICEX, c(2, 0, 2), include.constant=TRUE)
 models <- data.frame(p = rep(c(0, 0, 0, 1, 1, 1, 2, 2, 2), 2),
                      d = rep(0, 18),
                      q = rep(c(0, 1, 2), 6),
-                     include.constant = c(rep(FALSE, 9), rep(TRUE, 9)),
+                     include.drift = c(rep(FALSE, 9), rep(TRUE, 9)),
                      loglik = c(fit.00$loglik, fit.01$loglik, fit.02$loglik,
                                 fit.10$loglik, fit.11$loglik, fit.12$loglik,
                                 fit.20$loglik, fit.21$loglik, fit.22$loglik,
@@ -431,7 +431,7 @@ print(models, digits=6)
 
 ```{r}
 library(ggplot2)
-models$descr <- paste(models$p, models$q, models$include.constant)
+models$descr <- paste(models$p, models$q, models$include.drift)
 p <- ggplot(models, aes(descr,aicc))
 p + geom_point()+coord_flip()+theme_minimal()
 models[which(models$aicc == min(models$aicc)),]
@@ -444,7 +444,7 @@ models[which(models$aicc == min(models$aicc)),]
 выбрали "вторую" лучшую модель по критерию AIC
 
 ```{r}
-fit.best <- Arima(diff.log.MICEX, c(2, 0, 1), include.constant=TRUE)
+fit.best <- Arima(diff.log.MICEX, c(2, 0, 0), include.drift=TRUE)
 print(fit.best)
 
 

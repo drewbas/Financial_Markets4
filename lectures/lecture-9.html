@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Салихов Марсель (marcel.salikhov@gmail.com)" />
-  <meta name="date" content="2017-02-27" />
+  <meta name="date" content="2017-11-25" />
   <meta name="copyright" content="НИУ ВШЭ. Салихов Марсель (marcel.salikhov@gmail.com)"/>
   <title>Риск-менеджмент – оценка VaR, ES   Количественные финансы</title>
   <style type="text/css">code{white-space: pre;}</style>
@@ -64,7 +64,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   <p class="author">
 Салихов Марсель (<a href="mailto:marcel.salikhov@gmail.com">marcel.salikhov@gmail.com</a>)
   </p>
-  <p class="date">2017-02-27</p>
+  <p class="date">2017-11-25</p>
 </div>
 <div id="-" class="slide section level2">
 <h2>Цели лекции</h2>
@@ -136,7 +136,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>VaR с нормально распределенным убытком</h2>
 <p>Предположим, что ожидаемая доходность акции составляет 0,04 и среднеквадратичное отклонение равно 0,18.</p>
 <p>Если вы купили акций этой компании на 100 тыс. рублей, какой будет VaR при горизонте в 1 год?</p>
-<p>Предположим, что функция распределения убытка распределена нормально с ожидаемым значением -4 тыс. рублей и СКО равным 18 тыс. рублей.</p>
+<p>Предположим, что функция распределения <strong>убытка</strong> распределена нормально с ожидаемым значением -4 тыс. рублей и СКО равным 18 тыс. рублей.</p>
 <p>Тогда VaR будет равен:</p>
 <p><span class="math display">\[-4000 + 18 000 z_{\alpha} \]</span> где <span class="math inline">\(z_{\alpha}\)</span> – верхняя <span class="math inline">\(\alpha\)</span>-квантиль распределения нормального распределения.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r =<span class="st"> </span><span class="fl">0.04</span>
@@ -233,7 +233,7 @@ ES_nonp <span class="co"># непараметрическая оценка ES</s
 </ul>
 <p><span class="math display">\[X = \mu + \sigma T \]</span> или <span class="math inline">\(T = \frac{X- \mu}{\sigma}\)</span> – имеет классическое t-распределение.</p>
 <p>Таким образом, не-стандартизированное t-распределение Стьюдента имеет три параметра – <span class="math inline">\(\nu, \mu, \sigma\)</span>. В данном случае <span class="math inline">\(\sigma\)</span> не является среднеквадратическим отклонением, а параметром масштаба распределения (scale parameter)</p>
-<p>Другие характеритсика не-стандартизированного распределения Стьдента:</p>
+<p>Другие характеристики не-стандартизированного распределения Стьдента:</p>
 <p><span class="math display">\[ E(x) = \mu \]</span> <span class="math display">\[ Var(x) = \sigma^2 \frac{\nu}{\nu-2}\]</span></p>
 </div>
 <div id="--var--es--r" class="slide section level2">
@@ -555,7 +555,11 @@ col2 &lt;-<span class="st"> </span><span class="kw">heat.colors</span>(<span cla
 </div>
 <div id="-var--es-----r" class="slide section level2">
 <h2>Оценка VaR и ES для портфеля бумаг в R</h2>
-<p>+Пусть у нас есть портфель из трех акций – Газпром, Сбербанк, ГМК Норникель. + Стоимость портфеля = 1 млн рублей, распределенных равными долями. То есть доля каждой бумаги в портфеле равна 1/3 + Оценим VaR и ES для данного портфеля с допущением, что доходности бумаги имеют многомерное t-распределение.</p>
+<ul>
+<li>Пусть у нас есть портфель из трех акций – Газпром, Сбербанк, ГМК Норникель.</li>
+<li>Стоимость портфеля = 1 млн рублей, распределенных равными долями. То есть доля каждой бумаги в портфеле равна 1/3</li>
+<li>Оценим VaR и ES для данного портфеля с допущением, что доходности бумаги имеют многомерное t-распределение.</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(mnormt)
 alpha =<span class="st"> </span>.<span class="dv">05</span>
 

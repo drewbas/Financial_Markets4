@@ -2,14 +2,8 @@ base
 RevoUtilsMath
 RColorBrewer
 knitr
+forecast
 zoo
 xts
 TTR
 quantmod
-bitops
-RCurl
-XML
-rusquant
-timeDate
-forecast
-ggplot2

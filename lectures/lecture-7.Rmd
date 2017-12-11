@@ -1,7 +1,7 @@
 ---
 title: 'Оптимизация инвестиционных портфелей <br> "Количественные финансы" '
 author: "Салихов Марсель (marcel.salikhov@gmail.com)"
-date: "2017-01-30"
+date: "2017-10-20"
 output:
   slidy_presentation:
     css: styles.css
@@ -490,18 +490,37 @@ $$w^T \Sigma w - q R^Tw \rightarrow min$$
 
 ```{r, echo=FALSE}
 library(PerformanceAnalytics)
-library(rusquant)
+library(QuantTools)
 
-# start.date <- as.Date('2007-01-01')
-# MICEX <- rusquant::getSymbols.Finam('MICEX', from = start.date) # ммвб
-# GAZP <- rusquant::getSymbols.Finam('GAZP', from=start.date) # газпром
-# SBER <- rusquant::getSymbols.Finam('SBER', from=start.date) # газпром
-# GMKN <- rusquant::getSymbols.Finam('GMKN', from=start.date) # норникель
-# MGNT <- rusquant::getSymbols.Finam('MGNT', from=start.date) # магнит
-# MTSS <- rusquant::getSymbols.Finam('MTSS', from=start.date) # магнит
+quant_tools_to_xts <- function(df, ...){ 
+  df <- as.data.frame(df)
+  #df$date = as.Date(df$date)
+  ts = xts(df[,-1], order.by = df[,1])
+  return(ts)
+}
+
+start.date <- as.Date('2007-01-01')
+# MICEX <- quant_tools_to_xts(get_finam_data('MICEX', from = start.date, to = Sys.Date())) # индекс ММВБ 
+# GAZP <- quant_tools_to_xts(get_finam_data('GAZP', from = start.date, to = Sys.Date())) # индекс ММВБ 
+# SBER <- quant_tools_to_xts(get_finam_data('SBER', from = start.date, to = Sys.Date())) # индекс ММВБ 
 # sb <- SBER['::2007-07-17']/1000
 # SBER <- rbind(SBER[-(1:360)],sb)
+# GMKN <- quant_tools_to_xts(get_finam_data('GMKN', from = start.date, to = Sys.Date())) # индекс ММВБ 
+# MGNT <- quant_tools_to_xts(get_finam_data('MGNT', from = start.date, to = Sys.Date())) # индекс ММВБ 
+# MTSS <- quant_tools_to_xts(get_finam_data('MTSS', from = start.date, to = Sys.Date())) # индекс ММВБ 
 # 
+# MICEX.rtn <- diff(log(MICEX$close)) # расчет лог-доходности 
+# GAZP.rtn <- diff(log(GAZP$close)) # расчет лог-доходности 
+# SBER.rtn <- diff(log(SBER$close)) # расчет лог-доходности 
+# GMKN.rtn <- diff(log(GMKN$close)) # расчет лог-доходности 
+# MGNT.rtn <- diff(log(MGNT$close)) # расчет лог-доходности 
+# MTSS.rtn <- diff(log(MTSS$close)) # расчет лог-доходности 
+# # GAZP <- rusquant::getSymbols.Finam('GAZP', from=start.date) # газпром
+# # SBER <- rusquant::getSymbols.Finam('SBER', from=start.date) # газпром
+# # GMKN <- rusquant::getSymbols.Finam('GMKN', from=start.date) # норникель
+# # MGNT <- rusquant::getSymbols.Finam('MGNT', from=start.date) # магнит
+# # MTSS <- rusquant::getSymbols.Finam('MTSS', from=start.date) # магнит
+# # 
 
 rtns <- merge(GAZP.rtn, SBER.rtn, GMKN.rtn, MGNT.rtn, MTSS.rtn)
 names(rtns) <- c('GAZP', 'SBER', 'GMKN', 'MGNT', 'MTSS')
@@ -524,13 +543,13 @@ library(PerformanceAnalytics)
 Return.annualized(rtns, geometric = FALSE)
 ```
 
-Максимальная доходность (% в год) у Магнита (24,9%), у Газпрома -- средняя отрицательная доходность за период (-3,56%). 
+Максимальная доходность (% в год) у Магнита (22,9%), у Газпрома -- средняя отрицательная доходность за период (-1,0%). 
 
 ```{r}
 StdDev.annualized(rtns, geometric = FALSE)
 ```
 
-Показатели риска максимальны у акций Сбербанка (47,1%), минимальны -- у акций МТС. 
+Показатели риска максимальны у акций Сбербанка (48,0%), минимальны -- у акций Магнита. 
 
 ## График риск/доходность
 
@@ -570,6 +589,7 @@ cor(rtns)
 ```
 
 + Наибольшие значения корреляций наблюдаются для Газпрома и Сбербанка, минимальные значения корреляций - для Норникеля и Магнита. 
++ Между всеми бумагами наблюдается достаточно сильная корреляция 
 
 ## Расчет эффективной границы портфеля
 
