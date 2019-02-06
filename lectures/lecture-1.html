@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Салихов Марсель (marcel.salikhov@gmail.com)" />
-  <meta name="date" content="2018-11-06" />
+  <meta name="date" content="2018-11-20" />
   <meta name="copyright" content="НИУ ВШЭ. Салихов Марсель (marcel.salikhov@gmail.com)"/>
   <title>Введение в R   Количественные финансы</title>
   <style type="text/css">code{white-space: pre;}</style>
@@ -50,7 +50,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   </style>
   <link href="libs/slidy-2/styles/slidy.css" rel="stylesheet" />
   <script src="libs/slidy-2/scripts/slidy.js"></script>
-  <script src="libs/htmlwidgets-1.2/htmlwidgets.js"></script>
+  <script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
   <script src="libs/plotly-binding-4.8.0/plotly.js"></script>
   <script src="libs/typedarray-0.1/typedarray.min.js"></script>
   <script src="libs/jquery-1.11.3/jquery.min.js"></script>
@@ -67,7 +67,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   <p class="author">
 Салихов Марсель (<a href="mailto:marcel.salikhov@gmail.com">marcel.salikhov@gmail.com</a>)
   </p>
-  <p class="date">2018-11-06</p>
+  <p class="date">2018-11-20</p>
 </div>
 <div id="-" class="slide section level2">
 <h2>Цели лекции</h2>
@@ -101,8 +101,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>R одинаковым образом работает на всех современных платформах - Windows/Mac OS/Unix.</li>
 </ul>
 <p>Этот график тоже построен в R</p>
-<div id="htmlwidget-a3c3cad7f0d8f499bdd6" style="width:768px;height:576px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a3c3cad7f0d8f499bdd6">{"x":{"visdat":{"2587463a944":["function () ","plotlyVisDat"]},"cur_data":"2587463a944","attrs":{"2587463a944":{"showscale":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"z":{},"type":"surface","inherit":true},"2587463a944.1":{"showscale":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"z":{},"type":"surface","opacity":0.98,"inherit":true},"2587463a944.2":{"showscale":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"z":{},"type":"surface","opacity":0.98,"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"zaxis":{"title":"z"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"data":[{"colorbar":{"title":"z<br />z2<br />z3","ticklen":2},"colorscale":[["0","rgba(68,1,84,1)"],["0.0236220472440947","rgba(69,11,91,1)"],["0.0511811023622043","rgba(71,22,100,1)"],["0.0669291338582677","rgba(71,27,105,1)"],["0.074803149606299","rgba(71,29,108,1)"],["0.0905511811023624","rgba(72,34,113,1)"],["0.103346456692913","rgba(72,38,117,1)"],["0.173228346456693","rgba(68,60,129,1)"],["0.333333333333332","rgba(49,104,142,1)"],["0.41732283464567","rgba(42,124,142,1)"],["0.444881889763779","rgba(38,130,142,1)"],["0.460629921259843","rgba(38,134,141,1)"],["0.468503937007874","rgba(38,136,141,1)"],["0.483103674540682","rgba(37,140,140,1)"],["0.496062992125984","rgba(37,143,140,1)"],["0.566929133858268","rgba(34,161,135,1)"],["0.666666666666663","rgba(53,183,121,1)"],["0.811023622047245","rgba(133,210,78,1)"],["0.836614173228347","rgba(149,214,69,1)"],["0.854330708661418","rgba(160,217,61,1)"],["0.862204724409449","rgba(165,218,58,1)"],["0.875492125984253","rgba(172,220,51,1)"],["0.889763779527559","rgba(181,222,44,1)"],["0.956528871391076","rgba(225,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"z":[[8.83,8.92,8.8,8.91,8.97,9.2],[8.89,8.93,8.82,8.95,8.97,9.23],[8.81,8.91,8.78,8.94,8.91,9.2],[8.87,8.79,8.91,8.74,9.09,8.99],[8.9,8.85,8.94,8.81,9.11,8.99],[8.87,8.79,8.92,8.76,9.11,8.98],[8.89,8.9,8.75,8.93,9.04,9.18],[8.94,8.94,8.78,8.98,9.08,9.2],[8.85,8.92,8.77,8.99,9.05,9.19],[8.94,8.79,8.91,8.89,9.25,8.93],[8.96,8.88,8.95,8.99,9.28,8.97],[8.92,8.81,8.92,8.92,9.27,8.97],[8.84,8.9,8.8,9.1,9,9.18],[8.9,8.95,8.8,9.13,9.01,9.2],[8.82,8.92,8.77,9.11,9,9.18]],"type":"surface","frame":null},{"colorbar":{"title":"z<br />z2<br />z3","ticklen":2},"colorscale":[["0","rgba(68,1,84,1)"],["0.0236220472440947","rgba(69,11,91,1)"],["0.0511811023622043","rgba(71,22,100,1)"],["0.0669291338582677","rgba(71,27,105,1)"],["0.074803149606299","rgba(71,29,108,1)"],["0.0905511811023624","rgba(72,34,113,1)"],["0.103346456692913","rgba(72,38,117,1)"],["0.173228346456693","rgba(68,60,129,1)"],["0.333333333333332","rgba(49,104,142,1)"],["0.41732283464567","rgba(42,124,142,1)"],["0.444881889763779","rgba(38,130,142,1)"],["0.460629921259843","rgba(38,134,141,1)"],["0.468503937007874","rgba(38,136,141,1)"],["0.483103674540682","rgba(37,140,140,1)"],["0.496062992125984","rgba(37,143,140,1)"],["0.566929133858268","rgba(34,161,135,1)"],["0.666666666666663","rgba(53,183,121,1)"],["0.811023622047245","rgba(133,210,78,1)"],["0.836614173228347","rgba(149,214,69,1)"],["0.854330708661418","rgba(160,217,61,1)"],["0.862204724409449","rgba(165,218,58,1)"],["0.875492125984253","rgba(172,220,51,1)"],["0.889763779527559","rgba(181,222,44,1)"],["0.956528871391076","rgba(225,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"z":[[9.83,9.92,9.8,9.91,9.97,10.2],[9.89,9.93,9.82,9.95,9.97,10.23],[9.81,9.91,9.78,9.94,9.91,10.2],[9.87,9.79,9.91,9.74,10.09,9.99],[9.9,9.85,9.94,9.81,10.11,9.99],[9.87,9.79,9.92,9.76,10.11,9.98],[9.89,9.9,9.75,9.93,10.04,10.18],[9.94,9.94,9.78,9.98,10.08,10.2],[9.85,9.92,9.77,9.99,10.05,10.19],[9.94,9.79,9.91,9.89,10.25,9.93],[9.96,9.88,9.95,9.99,10.28,9.97],[9.92,9.81,9.92,9.92,10.27,9.97],[9.84,9.9,9.8,10.1,10,10.18],[9.9,9.95,9.8,10.13,10.01,10.2],[9.82,9.92,9.77,10.11,10,10.18]],"type":"surface","opacity":0.98,"frame":null},{"colorbar":{"title":"z<br />z2<br />z3","ticklen":2},"colorscale":[["0","rgba(68,1,84,1)"],["0.0236220472440947","rgba(69,11,91,1)"],["0.0511811023622043","rgba(71,22,100,1)"],["0.0669291338582677","rgba(71,27,105,1)"],["0.074803149606299","rgba(71,29,108,1)"],["0.0905511811023624","rgba(72,34,113,1)"],["0.103346456692913","rgba(72,38,117,1)"],["0.173228346456693","rgba(68,60,129,1)"],["0.333333333333332","rgba(49,104,142,1)"],["0.41732283464567","rgba(42,124,142,1)"],["0.444881889763779","rgba(38,130,142,1)"],["0.460629921259843","rgba(38,134,141,1)"],["0.468503937007874","rgba(38,136,141,1)"],["0.483103674540682","rgba(37,140,140,1)"],["0.496062992125984","rgba(37,143,140,1)"],["0.566929133858268","rgba(34,161,135,1)"],["0.666666666666663","rgba(53,183,121,1)"],["0.811023622047245","rgba(133,210,78,1)"],["0.836614173228347","rgba(149,214,69,1)"],["0.854330708661418","rgba(160,217,61,1)"],["0.862204724409449","rgba(165,218,58,1)"],["0.875492125984253","rgba(172,220,51,1)"],["0.889763779527559","rgba(181,222,44,1)"],["0.956528871391076","rgba(225,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"z":[[7.83,7.92,7.8,7.91,7.97,8.2],[7.89,7.93,7.82,7.95,7.97,8.23],[7.81,7.91,7.78,7.94,7.91,8.2],[7.87,7.79,7.91,7.74,8.09,7.99],[7.9,7.85,7.94,7.81,8.11,7.99],[7.87,7.79,7.92,7.76,8.11,7.98],[7.89,7.9,7.75,7.93,8.04,8.18],[7.94,7.94,7.78,7.98,8.08,8.2],[7.85,7.92,7.77,7.99,8.05,8.19],[7.94,7.79,7.91,7.89,8.25,7.93],[7.96,7.88,7.95,7.99,8.28,7.97],[7.92,7.81,7.92,7.92,8.27,7.97],[7.84,7.9,7.8,8.1,8,8.18],[7.9,7.95,7.8,8.13,8.01,8.2],[7.82,7.92,7.77,8.11,8,8.18]],"type":"surface","opacity":0.98,"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
+<div id="htmlwidget-bcb71897dcd8da03bd15" style="width:768px;height:576px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bcb71897dcd8da03bd15">{"x":{"visdat":{"40b4bc48eaf":["function () ","plotlyVisDat"]},"cur_data":"40b4bc48eaf","attrs":{"40b4bc48eaf":{"showscale":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"z":{},"type":"surface","inherit":true},"40b4bc48eaf.1":{"showscale":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"z":{},"type":"surface","opacity":0.98,"inherit":true},"40b4bc48eaf.2":{"showscale":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"z":{},"type":"surface","opacity":0.98,"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"zaxis":{"title":"z"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"data":[{"colorbar":{"title":"z<br />z2<br />z3","ticklen":2},"colorscale":[["0","rgba(68,1,84,1)"],["0.0236220472440947","rgba(69,11,91,1)"],["0.0511811023622043","rgba(71,22,100,1)"],["0.0669291338582677","rgba(71,27,105,1)"],["0.074803149606299","rgba(71,29,108,1)"],["0.0905511811023624","rgba(72,34,113,1)"],["0.103346456692913","rgba(72,38,117,1)"],["0.173228346456693","rgba(68,60,129,1)"],["0.333333333333332","rgba(49,104,142,1)"],["0.41732283464567","rgba(42,124,142,1)"],["0.444881889763779","rgba(38,130,142,1)"],["0.460629921259843","rgba(38,134,141,1)"],["0.468503937007874","rgba(38,136,141,1)"],["0.483103674540682","rgba(37,140,140,1)"],["0.496062992125984","rgba(37,143,140,1)"],["0.566929133858268","rgba(34,161,135,1)"],["0.666666666666663","rgba(53,183,121,1)"],["0.811023622047245","rgba(133,210,78,1)"],["0.836614173228347","rgba(149,214,69,1)"],["0.854330708661418","rgba(160,217,61,1)"],["0.862204724409449","rgba(165,218,58,1)"],["0.875492125984253","rgba(172,220,51,1)"],["0.889763779527559","rgba(181,222,44,1)"],["0.956528871391076","rgba(225,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"z":[[8.83,8.92,8.8,8.91,8.97,9.2],[8.89,8.93,8.82,8.95,8.97,9.23],[8.81,8.91,8.78,8.94,8.91,9.2],[8.87,8.79,8.91,8.74,9.09,8.99],[8.9,8.85,8.94,8.81,9.11,8.99],[8.87,8.79,8.92,8.76,9.11,8.98],[8.89,8.9,8.75,8.93,9.04,9.18],[8.94,8.94,8.78,8.98,9.08,9.2],[8.85,8.92,8.77,8.99,9.05,9.19],[8.94,8.79,8.91,8.89,9.25,8.93],[8.96,8.88,8.95,8.99,9.28,8.97],[8.92,8.81,8.92,8.92,9.27,8.97],[8.84,8.9,8.8,9.1,9,9.18],[8.9,8.95,8.8,9.13,9.01,9.2],[8.82,8.92,8.77,9.11,9,9.18]],"type":"surface","frame":null},{"colorbar":{"title":"z<br />z2<br />z3","ticklen":2},"colorscale":[["0","rgba(68,1,84,1)"],["0.0236220472440947","rgba(69,11,91,1)"],["0.0511811023622043","rgba(71,22,100,1)"],["0.0669291338582677","rgba(71,27,105,1)"],["0.074803149606299","rgba(71,29,108,1)"],["0.0905511811023624","rgba(72,34,113,1)"],["0.103346456692913","rgba(72,38,117,1)"],["0.173228346456693","rgba(68,60,129,1)"],["0.333333333333332","rgba(49,104,142,1)"],["0.41732283464567","rgba(42,124,142,1)"],["0.444881889763779","rgba(38,130,142,1)"],["0.460629921259843","rgba(38,134,141,1)"],["0.468503937007874","rgba(38,136,141,1)"],["0.483103674540682","rgba(37,140,140,1)"],["0.496062992125984","rgba(37,143,140,1)"],["0.566929133858268","rgba(34,161,135,1)"],["0.666666666666663","rgba(53,183,121,1)"],["0.811023622047245","rgba(133,210,78,1)"],["0.836614173228347","rgba(149,214,69,1)"],["0.854330708661418","rgba(160,217,61,1)"],["0.862204724409449","rgba(165,218,58,1)"],["0.875492125984253","rgba(172,220,51,1)"],["0.889763779527559","rgba(181,222,44,1)"],["0.956528871391076","rgba(225,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"z":[[9.83,9.92,9.8,9.91,9.97,10.2],[9.89,9.93,9.82,9.95,9.97,10.23],[9.81,9.91,9.78,9.94,9.91,10.2],[9.87,9.79,9.91,9.74,10.09,9.99],[9.9,9.85,9.94,9.81,10.11,9.99],[9.87,9.79,9.92,9.76,10.11,9.98],[9.89,9.9,9.75,9.93,10.04,10.18],[9.94,9.94,9.78,9.98,10.08,10.2],[9.85,9.92,9.77,9.99,10.05,10.19],[9.94,9.79,9.91,9.89,10.25,9.93],[9.96,9.88,9.95,9.99,10.28,9.97],[9.92,9.81,9.92,9.92,10.27,9.97],[9.84,9.9,9.8,10.1,10,10.18],[9.9,9.95,9.8,10.13,10.01,10.2],[9.82,9.92,9.77,10.11,10,10.18]],"type":"surface","opacity":0.98,"frame":null},{"colorbar":{"title":"z<br />z2<br />z3","ticklen":2},"colorscale":[["0","rgba(68,1,84,1)"],["0.0236220472440947","rgba(69,11,91,1)"],["0.0511811023622043","rgba(71,22,100,1)"],["0.0669291338582677","rgba(71,27,105,1)"],["0.074803149606299","rgba(71,29,108,1)"],["0.0905511811023624","rgba(72,34,113,1)"],["0.103346456692913","rgba(72,38,117,1)"],["0.173228346456693","rgba(68,60,129,1)"],["0.333333333333332","rgba(49,104,142,1)"],["0.41732283464567","rgba(42,124,142,1)"],["0.444881889763779","rgba(38,130,142,1)"],["0.460629921259843","rgba(38,134,141,1)"],["0.468503937007874","rgba(38,136,141,1)"],["0.483103674540682","rgba(37,140,140,1)"],["0.496062992125984","rgba(37,143,140,1)"],["0.566929133858268","rgba(34,161,135,1)"],["0.666666666666663","rgba(53,183,121,1)"],["0.811023622047245","rgba(133,210,78,1)"],["0.836614173228347","rgba(149,214,69,1)"],["0.854330708661418","rgba(160,217,61,1)"],["0.862204724409449","rgba(165,218,58,1)"],["0.875492125984253","rgba(172,220,51,1)"],["0.889763779527559","rgba(181,222,44,1)"],["0.956528871391076","rgba(225,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"z":[[7.83,7.92,7.8,7.91,7.97,8.2],[7.89,7.93,7.82,7.95,7.97,8.23],[7.81,7.91,7.78,7.94,7.91,8.2],[7.87,7.79,7.91,7.74,8.09,7.99],[7.9,7.85,7.94,7.81,8.11,7.99],[7.87,7.79,7.92,7.76,8.11,7.98],[7.89,7.9,7.75,7.93,8.04,8.18],[7.94,7.94,7.78,7.98,8.08,8.2],[7.85,7.92,7.77,7.99,8.05,8.19],[7.94,7.79,7.91,7.89,8.25,7.93],[7.96,7.88,7.95,7.99,8.28,7.97],[7.92,7.81,7.92,7.92,8.27,7.97],[7.84,7.9,7.8,8.1,8,8.18],[7.9,7.95,7.8,8.13,8.01,8.2],[7.82,7.92,7.77,8.11,8,8.18]],"type":"surface","opacity":0.98,"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
 </div>
 <div id="-r" class="slide section level2">
 <h2>Ограничения R</h2>
@@ -364,6 +364,17 @@ B</code></pre></div>
 <pre><code>## [1] 3 5 7</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">B[,<span class="dv">1</span>] <span class="co"># 1 столбец</span></code></pre></div>
 <pre><code>## [1] 2 3</code></pre>
+<p>над матрицами можно также совершать операции</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">C &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="op">-</span><span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>),<span class="dv">3</span>,<span class="dv">2</span>)
+B</code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    2    4    1
+## [2,]    3    5    7</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">C</code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    1
+## [2,]    4    2
+## [3,]   -2    1</code></pre>
 </div>
 <div id="-data-frame" class="slide section level2">
 <h2>Тип data frame</h2>
@@ -495,17 +506,17 @@ L</code></pre></div>
 <h2>Тип Date</h2>
 <p>Тип <code>Date</code> представляет календарные даты. Финансовые серии как правило представляют собой временный ряд, упорядоченный во времени. Поэтому эффективная работа с данными важна для финансового анализа</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">date</span>()</code></pre></div>
-<pre><code>## [1] &quot;Tue Nov  6 23:57:01 2018&quot;</code></pre>
+<pre><code>## [1] &quot;Tue Nov 20 23:11:23 2018&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">today &lt;-<span class="st"> </span><span class="kw">Sys.Date</span>()
 today</code></pre></div>
-<pre><code>## [1] &quot;2018-11-06&quot;</code></pre>
+<pre><code>## [1] &quot;2018-11-20&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(today)</code></pre></div>
 <pre><code>## [1] &quot;Date&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.numeric</span>(today) <span class="co"># внутри переменная Date представляет собой количество дней с 1 января 1970 года</span></code></pre></div>
-<pre><code>## [1] 17841</code></pre>
+<pre><code>## [1] 17855</code></pre>
 <p>Даты можно представлять различным образом с помощью функции format</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">format</span>(today,  <span class="dt">format =</span> <span class="st">&quot;%d %b %Y&quot;</span>)  <span class="co"># with month as a word</span></code></pre></div>
-<pre><code>## [1] &quot;06 ноя 2018&quot;</code></pre>
+<pre><code>## [1] &quot;20 ноя 2018&quot;</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -564,24 +575,24 @@ today</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Sys.setlocale</span>(<span class="dt">locale =</span> <span class="st">&#39;C&#39;</span>)</code></pre></div>
 <pre><code>## [1] &quot;C/C/C/C/C/ru_RU.UTF-8&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">format</span>(today,  <span class="dt">format =</span> <span class="st">&quot;%d %b %Y&quot;</span>)  <span class="co"># with month as a word</span></code></pre></div>
-<pre><code>## [1] &quot;06 Nov 2018&quot;</code></pre>
+<pre><code>## [1] &quot;20 Nov 2018&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Sys.setlocale</span>(<span class="dt">locale =</span> <span class="st">&quot;ru_RU.UTF-8&quot;</span>)</code></pre></div>
 <pre><code>## [1] &quot;ru_RU.UTF-8/ru_RU.UTF-8/ru_RU.UTF-8/C/ru_RU.UTF-8/ru_RU.UTF-8&quot;</code></pre>
 <p>можно создавать вектора дат</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt =<span class="st"> </span><span class="kw">seq</span>(today, <span class="dt">length.out=</span><span class="dv">10</span>, <span class="dt">by=</span><span class="st">&quot;1 week&quot;</span>)
 dt</code></pre></div>
-<pre><code>##  [1] &quot;2018-11-06&quot; &quot;2018-11-13&quot; &quot;2018-11-20&quot; &quot;2018-11-27&quot; &quot;2018-12-04&quot;
-##  [6] &quot;2018-12-11&quot; &quot;2018-12-18&quot; &quot;2018-12-25&quot; &quot;2019-01-01&quot; &quot;2019-01-08&quot;</code></pre>
+<pre><code>##  [1] &quot;2018-11-20&quot; &quot;2018-11-27&quot; &quot;2018-12-04&quot; &quot;2018-12-11&quot; &quot;2018-12-18&quot;
+##  [6] &quot;2018-12-25&quot; &quot;2019-01-01&quot; &quot;2019-01-08&quot; &quot;2019-01-15&quot; &quot;2019-01-22&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">weekdays</span>(today)</code></pre></div>
 <pre><code>## [1] &quot;вторник&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">months</span>(today)</code></pre></div>
 <pre><code>## [1] &quot;ноября&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dt <span class="op">-</span><span class="dv">1</span></code></pre></div>
-<pre><code>##  [1] &quot;2018-11-05&quot; &quot;2018-11-12&quot; &quot;2018-11-19&quot; &quot;2018-11-26&quot; &quot;2018-12-03&quot;
-##  [6] &quot;2018-12-10&quot; &quot;2018-12-17&quot; &quot;2018-12-24&quot; &quot;2018-12-31&quot; &quot;2019-01-07&quot;</code></pre>
+<pre><code>##  [1] &quot;2018-11-19&quot; &quot;2018-11-26&quot; &quot;2018-12-03&quot; &quot;2018-12-10&quot; &quot;2018-12-17&quot;
+##  [6] &quot;2018-12-24&quot; &quot;2018-12-31&quot; &quot;2019-01-07&quot; &quot;2019-01-14&quot; &quot;2019-01-21&quot;</code></pre>
 <p>Можно делать конвертацию между типами <code>character</code> и <code>Date</code> c помощью функций <code>as.Date</code> и <code>as.character</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.character</span>(today)</code></pre></div>
-<pre><code>## [1] &quot;2018-11-06&quot;</code></pre>
+<pre><code>## [1] &quot;2018-11-20&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">str =<span class="st"> &#39;2018-11-06&#39;</span> <span class="co">#  yyyy-mm-dd - стандартный формат представления даты </span>
 <span class="kw">as.Date</span>(str)</code></pre></div>
 <pre><code>## [1] &quot;2018-11-06&quot;</code></pre>
@@ -616,16 +627,16 @@ df_xts &lt;-<span class="st"> </span><span class="kw">as.xts</span>(<span class=
 ##  $ important: chr &quot;very important info!&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">xts</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="kw">Sys.Date</span>()<span class="op">+</span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)</code></pre></div>
 <pre><code>##            [,1]
-## 2018-11-07    1
-## 2018-11-08    2
-## 2018-11-09    3
-## 2018-11-10    4
-## 2018-11-11    5
-## 2018-11-12    6
-## 2018-11-13    7
-## 2018-11-14    8
-## 2018-11-15    9
-## 2018-11-16   10</code></pre>
+## 2018-11-21    1
+## 2018-11-22    2
+## 2018-11-23    3
+## 2018-11-24    4
+## 2018-11-25    5
+## 2018-11-26    6
+## 2018-11-27    7
+## 2018-11-28    8
+## 2018-11-29    9
+## 2018-11-30   10</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">index</span>(df_xts))</code></pre></div>
 <pre><code>## [1] &quot;2007-01-02 MSK&quot; &quot;2007-01-03 MSK&quot; &quot;2007-01-04 MSK&quot; &quot;2007-01-05 MSK&quot;
 ## [5] &quot;2007-01-06 MSK&quot; &quot;2007-01-07 MSK&quot;</code></pre>
@@ -786,9 +797,9 @@ df_xts[days]</code></pre></div>
 y =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)
 
 <span class="kw">plot</span>(<span class="dt">x =</span> x,<span class="dt">y =</span>y , <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>)</code></pre></div>
-<p><img src="lecture-1_files/figure-slidy/unnamed-chunk-39-1.png" width="768" /></p>
+<p><img src="lecture-1_files/figure-slidy/unnamed-chunk-40-1.png" width="768" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(<span class="kw">rnorm</span>(<span class="dv">100</span>))</code></pre></div>
-<p><img src="lecture-1_files/figure-slidy/unnamed-chunk-39-2.png" width="768" /></p>
+<p><img src="lecture-1_files/figure-slidy/unnamed-chunk-40-2.png" width="768" /></p>
 </div>
 <div id="---" class="slide section level2">
 <h2>Пример визуализации финансовых данных</h2>
@@ -811,11 +822,11 @@ y =<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</
 ## This message is shown once per session and may be disabled by setting
 ## options(&quot;getSymbols.yahoo.warning&quot;=FALSE).</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chartSeries</span>(AAPL, <span class="dt">theme =</span> <span class="st">&#39;white&#39;</span>) </code></pre></div>
-<p><img src="lecture-1_files/figure-slidy/unnamed-chunk-40-1.png" width="768" /></p>
+<p><img src="lecture-1_files/figure-slidy/unnamed-chunk-41-1.png" width="768" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chartSeries</span>(AAPL[<span class="st">&#39;2017::&#39;</span>], <span class="dt">theme =</span> <span class="st">&#39;white&#39;</span>)</code></pre></div>
-<p><img src="lecture-1_files/figure-slidy/unnamed-chunk-40-2.png" width="768" /></p>
+<p><img src="lecture-1_files/figure-slidy/unnamed-chunk-41-2.png" width="768" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">diff</span>(<span class="kw">log</span>(<span class="kw">Cl</span>(AAPL))), <span class="dt">type =</span> <span class="st">&#39;l&#39;</span>, <span class="dt">main =</span> <span class="st">&#39;Лог-доходность акций AAPL, 2007-2018 &#39;</span>)</code></pre></div>
-<p><img src="lecture-1_files/figure-slidy/unnamed-chunk-40-3.png" width="768" /></p>
+<p><img src="lecture-1_files/figure-slidy/unnamed-chunk-41-3.png" width="768" /></p>
 </div>
 
   <!-- dynamically load mathjax for compatibility with self-contained -->

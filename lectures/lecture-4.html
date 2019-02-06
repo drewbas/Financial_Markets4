@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Салихов Марсель (marcel.salikhov@gmail.com)" />
-  <meta name="date" content="2017-12-11" />
+  <meta name="date" content="2018-11-27" />
   <meta name="copyright" content="НИУ ВШЭ. Салихов Марсель (marcel.salikhov@gmail.com)"/>
   <title>Линейные модели финансовых серий (AR)   Количественные финансы</title>
   <style type="text/css">code{white-space: pre;}</style>
@@ -59,7 +59,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   <p class="author">
 Салихов Марсель (<a href="mailto:marcel.salikhov@gmail.com">marcel.salikhov@gmail.com</a>)
   </p>
-  <p class="date">2017-12-11</p>
+  <p class="date">2018-11-27</p>
 </div>
 <div id="-" class="slide section level2">
 <h2>Цели лекции</h2>
@@ -75,11 +75,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="slide section level2">
 <h2>Автокорреляция</h2>
 <ul>
-<li>Когда мы работаем с финансовыми данными, обычно мы хотим научиться либо прогнозировать либо, либо симулировать их (к примеру, для риск-менеджмента). Для того, чтобы строить прогнозы или симуляции, необходимо иметь <strong>модель</strong> серии.</li>
+<li>Когда мы работаем с финансовыми данными, обычно мы хотим научиться либо прогнозировать, либо симулировать их (к примеру, для риск-менеджмента). Для того, чтобы строить прогнозы или симуляции, необходимо иметь <strong>модель</strong> серии.</li>
 <li>Модель – это упрощенное представление о реальности. Мы хотим, чтобы модели наши модели инкорпорировали особенности серий, которые наблюдаются эмпирически.<br />
 </li>
 <li>Часто в финансовых сериях последовательные точки наблюдений влияют друг на друга в определенной степени – имеют корреляцию. С точки зрения количественного анализа задача состоит в том, чтобы идентифицировать и структурировать эти корреляции.</li>
-<li>Содержательно эту зависимость можно представить как распространение информации. Инвесторам требует какое-то времени, чтобы оценить и интерперировать поступающую информацию. По этим причинам доходности в момент времени <span class="math inline">\(t\)</span> могут быть связаны с доходностью в момент времени <span class="math inline">\(t-1\)</span>. Таким образом, в серии сохраняется определенная “память”.</li>
+<li>Содержательно эту зависимость можно представить как распространение информации. Инвесторам требует какое-то времени, чтобы оценить и интерпретировать поступающую информацию. По этим причинам доходности в момент времени <span class="math inline">\(t\)</span> могут быть связаны с доходностью в момент времени <span class="math inline">\(t-1\)</span>. Таким образом, в серии сохраняется определенная “память”.</li>
 <li>Адекватное моделирование этой корреляции может существенно улучшить возможности прогнозирования и для более сложных моделей.</li>
 <li>Если последовательные наблюдения во временном ряде скоррелированы между собой, то мы говорим, что в ряде есть <strong>серийная корреляция</strong> (или <strong>автокорреляция</strong>)</li>
 </ul>
@@ -89,7 +89,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Автокорреляция с лагом <span class="math inline">\(k\)</span> или <span class="math inline">\(\rho_k\)</span> определяется <strong>автоковариацией</strong>, нормализованной на дисперсию ряда:</p>
 <p><span class="math display">\[\rho_k = \frac{C_k}{\sigma^2} \]</span> <strong>Автоковариация</strong> временного ряда с лагом <span class="math inline">\(k\)</span> определяется как</p>
 <p><span class="math display">\[C_k = E[(x_t - \mu)(x_{t+k}-\mu)] \]</span> где <span class="math inline">\(\mu\)</span> – это ожидаемое значение (среднее) временного ряда. Ковариация определяет степень <strong>линейной зависимости</strong> между переменными, то есть ковариация говорит нам на сколько переменные изменяются вместе. Корреляция может не учесть нелинейную зависимость, которая есть в серии.</p>
-<p>На практике мы не знаем истинных значений этих параметров (среднего, дисперсии, коварации) и вынуждены оценивать <strong>выборочные</strong> значения - по имеющейся у нас выборке.</p>
+<p>На практике мы не знаем истинных значений этих параметров (среднего, дисперсии, ковариации) и вынуждены оценивать <strong>выборочные</strong> значения - по имеющейся у нас выборке.</p>
 </div>
 <div class="slide section level2">
 <h2>Коррелограмма</h2>
@@ -115,7 +115,7 @@ w &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1
 <div id="---" class="slide section level2">
 <h2>Коррелограмма для линейного тренда</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">w &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">100</span>)
-<span class="kw">layout</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)
+<span class="kw">layout</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) <span class="co"># расположить графики друг на другом </span>
 <span class="kw">plot</span>(w, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)
 <span class="kw">acf</span>(w)</code></pre></div>
 <p><img src="lecture-4_files/figure-slidy/unnamed-chunk-2-1.png" width="1152" style="display: block; margin: auto;" /></p>
@@ -150,7 +150,7 @@ w &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1
 <div id="---random-walk" class="slide section level2">
 <h2>Модель случайного блуждания (random walk)</h2>
 <ul>
-<li>Модель random walk – это модель временного ряда, в которой текущее значение равно предыдущему значению плюс случайная компонента (белый шум).</li>
+<li>Модель <code>random walk</code> – это модель временного ряда, в которой текущее значение равно предыдущему значению плюс случайная компонента (<em>белый шум</em>).</li>
 </ul>
 <p><span class="math display">\[ x_t = x_{t-1} + w_t \]</span></p>
 <ul>
@@ -167,7 +167,7 @@ x &lt;-<span class="st"> </span>w &lt;-<span class="st"> </span><span class="kw"
 <div id="-random-walk---" class="slide section level2">
 <h2>Модель random walk для финансовых данных</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#getSymbols(&#39;MSFT&#39;, src=&#39;yahoo&#39;)</span>
-<span class="kw">acf</span>(<span class="kw">diff</span>((<span class="kw">Ad</span>(MSFT))), <span class="dt">na.action =</span> na.omit)</code></pre></div>
+<span class="kw">acf</span>(<span class="kw">diff</span>((<span class="kw">Cl</span>(MSFT))), <span class="dt">na.action =</span> na.omit, <span class="dt">main =</span> <span class="st">&#39;Автокорреляция лог-доходностей MSFT&#39;</span>)</code></pre></div>
 <p><img src="lecture-4_files/figure-slidy/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <ul>
 <li>Большинство пиков лагов не отличаются от нуля на 5% уровне (но есть некоторые, которые немного выше этого уровня, к примеру k= 11 )</li>
@@ -248,7 +248,7 @@ ar1 &lt;-<span class="st"> </span>w &lt;-<span class="st"> </span><span class="k
 </div>
 <div id="r2" class="slide section level2">
 <h2>АR(2)</h2>
-<p>Рассмотрим теперь AR(2) модель, в которой используется три лага для моделирования текущего значения:</p>
+<p>Рассмотрим теперь AR(2) модель, в которой используется два лага для моделирования текущего значения:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
 ar3 &lt;-<span class="st"> </span>ar2 &lt;-<span class="st"> </span>w &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1000</span>)
 <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">3</span><span class="op">:</span><span class="dv">1000</span>) ar2[t] &lt;-<span class="st"> </span><span class="fl">0.66</span><span class="op">*</span>ar3[t<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="fl">0.333</span><span class="op">*</span>ar3[t<span class="op">-</span><span class="dv">2</span>]  <span class="op">+</span><span class="st"> </span>w[t]
@@ -259,10 +259,18 @@ ar3 &lt;-<span class="st"> </span>ar2 &lt;-<span class="st"> </span>w &lt;-<span
 <p><img src="lecture-4_files/figure-slidy/unnamed-chunk-11-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>попробуем оценить параметры c помощью функции <code>ar</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ar2_est &lt;-<span class="st"> </span><span class="kw">ar</span>(ar2, <span class="dt">method =</span> <span class="st">&quot;mle&quot;</span>)
-ar2_est<span class="op">$</span>ar</code></pre></div>
-<pre><code> [1]  0.54834553 -0.64784189  0.50292970 -0.46611963  0.37791341
- [6] -0.32148035  0.27182489 -0.21575636  0.19582157 -0.10440147
-[11]  0.06845597 -0.08846380</code></pre>
+ar2_est</code></pre></div>
+<pre><code>
+Call:
+ar(x = ar2, method = &quot;mle&quot;)
+
+Coefficients:
+      1        2        3        4        5        6        7        8  
+ 0.5483  -0.6478   0.5029  -0.4661   0.3779  -0.3215   0.2718  -0.2158  
+      9       10       11       12  
+ 0.1958  -0.1044   0.0685  -0.0885  
+
+Order selected 12  sigma^2 estimated as  1.052</code></pre>
 </div>
 <div id="f--ar1--ar2" class="slide section level2">
 <h2>АСF для AR(1) и AR(2)</h2>

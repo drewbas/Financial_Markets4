@@ -1,5 +1,4 @@
 base
-RevoUtilsMath
 RColorBrewer
 knitr
 forecast
@@ -7,3 +6,5 @@ zoo
 xts
 TTR
 quantmod
+RevoUtilsMath
+RevoUtils
