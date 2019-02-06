@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Салихов Марсель (marcel.salikhov@gmail.com)" />
-  <meta name="date" content="2017-10-20" />
+  <meta name="date" content="2019-02-06" />
   <meta name="copyright" content="НИУ ВШЭ. Салихов Марсель (marcel.salikhov@gmail.com)"/>
   <title>Оптимизация инвестиционных портфелей   Количественные финансы</title>
   <style type="text/css">code{white-space: pre;}</style>
@@ -59,7 +59,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   <p class="author">
 Салихов Марсель (<a href="mailto:marcel.salikhov@gmail.com">marcel.salikhov@gmail.com</a>)
   </p>
-  <p class="date">2017-10-20</p>
+  <p class="date">2019-02-06</p>
 </div>
 <div id="-" class="slide section level2">
 <h2>Цели лекции</h2>
@@ -72,7 +72,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>понять, что такое эффективная граница (effective frontier) и эффективный (оптимальный) портфель</li>
 <li>понять, что такое тангенциальный портфель (tangency portfolio)</li>
 <li>посчитать эффективный портфель, состоящий из акций 5 компаний (Газпром, Сбербанк, Норникель, Магнит, МТС)</li>
-<li>понять ограничения оптимизации риск/доходность на практике</li>
+<li>понять ограничения оптимизации “риск/доходность” на практике</li>
 </ul>
 </div>
 <div id="--" class="slide section level2">
@@ -82,7 +82,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Если вам предлагают две инвестиции с одинаковым уровня ожидаемого риска, но разной ожидаемой доходностью, вы выберете вариант, который предлагает <strong>большую доходность</strong>.</li>
 <li>Если две инвестиции предлагают одинаковый уровень ожидаемой доходности, но разный уровень риска, то вы выберете инвестицию с <strong>меньшим уровнем риска</strong>.</li>
 <li>Но что делать, если вам надо распределить ваши свободные сбережения между 30 наиболее ликвидными бумагами, которые торгуются на российском (или на глобальном рынке) рынке. Как выбрать доли распределения в портфеле?</li>
-<li>Оптимальное распределение долей в портфеле – задача <strong>asset allocation</strong> – важный вопрос. Основная часть различий в риск/доходностях разных портфелей связаны именно с распределением долей, а не с различиями в доходностях отдельных активов.</li>
+<li>Оптимальное распределение долей в портфеле – задача <strong>asset allocation</strong> – важный вопрос. Основная часть отличий в риск/доходностях разных портфелей связаны именно с распределением долей, а не с различиями в доходностях отдельных активов.</li>
 </ul>
 </div>
 <div id="--harry-markowitz----" class="slide section level2">
@@ -587,6 +587,17 @@ sd_p2 &lt;-<span class="st"> </span><span class="kw">sqrt</span>(w<span class="o
 <div id="-------" class="slide section level2">
 <h2>Портфель – Газпром, Сбербанк и Норникель, Магнит и МТС</h2>
 <p>Рассмотрим портфель из акций 5 российских компаний из разных отраслей.</p>
+<pre><code>
+Attaching package: &#39;PerformanceAnalytics&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:graphics&#39;:
+
+    legend</code></pre>
+<pre><code>Loading required package: data.table</code></pre>
+<pre><code>
+Attaching package: &#39;data.table&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:xts&#39;:
+
+    first, last</code></pre>
 <p><img src="lecture-7_files/figure-slidy/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>Примечание: в данном случае мы не учитываем выплаченне дивиденды в доходностях.</p>
 </div>
@@ -595,15 +606,15 @@ sd_p2 &lt;-<span class="st"> </span><span class="kw">sqrt</span>(w<span class="o
 <p>Рассчитаем показатели доходности и риска (стандартного отклонения) с помощью функций из пакета <code>PerformanceAnalytics</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(PerformanceAnalytics)
 <span class="kw">Return.annualized</span>(rtns, <span class="dt">geometric =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<pre><code>                       GAZP      SBER      GMKN      MGNT       MTSS
-Annualized Return -0.035557 0.1488761 0.1239381 0.2493263 0.06276878</code></pre>
-<p>Максимальная доходность (% в год) у Магнита (22,9%), у Газпрома – средняя отрицательная доходность за период (-1,0%).</p>
+<pre><code>                        GAZP       SBER      GMKN      MGNT       MTSS
+Annualized Return -0.0646035 0.09180286 0.1107629 0.1343745 0.01099859</code></pre>
+<p>Максимальная доходность (% в год) у Магнита (11,0%), у Газпрома – средняя отрицательная доходность за период (-6,4%).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">StdDev.annualized</span>(rtns, <span class="dt">geometric =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<pre><code>                                   GAZP      SBER    GMKN     MGNT
-Annualized Standard Deviation 0.3852141 0.4705597 0.43746 0.405139
+<pre><code>                                   GAZP      SBER      GMKN      MGNT
+Annualized Standard Deviation 0.3665802 0.4663409 0.4182419 0.3743876
                                    MTSS
-Annualized Standard Deviation 0.3826478</code></pre>
-<p>Показатели риска максимальны у акций Сбербанка (48,0%), минимальны – у акций Магнита.</p>
+Annualized Standard Deviation 0.3676073</code></pre>
+<p>Показатели риска максимальны у акций Сбербанка (47,0%), минимальны – у акций Магнита.</p>
 </div>
 <div id="-" class="slide section level2">
 <h2>График риск/доходность</h2>
@@ -616,9 +627,9 @@ tab[,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">a
 tab[,<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.character</span>((tab[,<span class="dv">2</span>])))
 <span class="kw">names</span>(tab) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;Доходность&#39;</span> ,<span class="st">&#39;Волатильность&#39;</span>, <span class="st">&#39;Тикер&#39;</span>)
 
-<span class="kw">require</span>(ggplot2)
-
-p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(tab, <span class="kw">aes</span>(<span class="dt">x =</span> Волатильность, <span class="dt">y =</span> Доходность, <span class="dt">label =</span> Тикер))
+<span class="kw">require</span>(ggplot2)</code></pre></div>
+<pre><code>Loading required package: ggplot2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(tab, <span class="kw">aes</span>(<span class="dt">x =</span> Волатильность, <span class="dt">y =</span> Доходность, <span class="dt">label =</span> Тикер))
 p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()<span class="op">+</span><span class="kw">geom_text</span>(<span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">vjust  =</span> <span class="op">-</span><span class="dv">1</span>)<span class="op">+</span>
 <span class="st">   </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">   </span><span class="kw">ggtitle</span>(<span class="st">&#39;Cоотношение риск/доходность для 5 бумаг&#39;</span>)</code></pre></div>
@@ -628,11 +639,11 @@ p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point<
 <h2>Матрица ковариаций</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(rtns)</code></pre></div>
 <pre><code>             GAZP         SBER         GMKN         MGNT         MTSS
-GAZP 0.0005888488 0.0005362251 0.0004293117 0.0001960058 0.0003921397
-SBER 0.0005362251 0.0008786762 0.0004694840 0.0002636085 0.0004666510
-GMKN 0.0004293117 0.0004694840 0.0007594098 0.0001878189 0.0003555880
-MGNT 0.0001960058 0.0002636085 0.0001878189 0.0006513398 0.0002056891
-MTSS 0.0003921397 0.0004666510 0.0003555880 0.0002056891 0.0005810292</code></pre>
+GAZP 0.0005332580 0.0004839621 0.0003747466 0.0001794604 0.0003449180
+SBER 0.0004839621 0.0008629914 0.0004250098 0.0002345590 0.0004234389
+GMKN 0.0003747466 0.0004250098 0.0006941519 0.0001708417 0.0003098085
+MGNT 0.0001794604 0.0002345590 0.0001708417 0.0005562146 0.0001829457
+MTSS 0.0003449180 0.0004234389 0.0003098085 0.0001829457 0.0005362506</code></pre>
 <ul>
 <li>Матрицы ковариаций показывают попарные значения ковариаций в портфеле</li>
 <li>Эти матрицы являются одним из основных элементов при портфельном анализе, однако сами по себе достаточно трудны для восприятия</li>
@@ -643,11 +654,11 @@ MTSS 0.0003921397 0.0004666510 0.0003555880 0.0002056891 0.0005810292</code></pr
 <h2>Матрица корреляций</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(rtns)</code></pre></div>
 <pre><code>          GAZP      SBER      GMKN      MGNT      MTSS
-GAZP 1.0000000 0.7454712 0.6419966 0.3164924 0.6704092
-SBER 0.7454712 1.0000000 0.5747359 0.3484505 0.6530986
-GMKN 0.6419966 0.5747359 1.0000000 0.2670530 0.5353158
-MGNT 0.3164924 0.3484505 0.2670530 1.0000000 0.3343555
-MTSS 0.6704092 0.6530986 0.5353158 0.3343555 1.0000000</code></pre>
+GAZP 1.0000000 0.7134104 0.6159448 0.3295176 0.6450053
+SBER 0.7134104 1.0000000 0.5491215 0.3385538 0.6224488
+GMKN 0.6159448 0.5491215 1.0000000 0.2749448 0.5077878
+MGNT 0.3295176 0.3385538 0.2749448 1.0000000 0.3349787
+MTSS 0.6450053 0.6224488 0.5077878 0.3349787 1.0000000</code></pre>
 <ul>
 <li>Наибольшие значения корреляций наблюдаются для Газпрома и Сбербанка, минимальные значения корреляций - для Норникеля и Магнита.</li>
 <li>Между всеми бумагами наблюдается достаточно сильная корреляция</li>
@@ -655,39 +666,44 @@ MTSS 0.6704092 0.6530986 0.5353158 0.3343555 1.0000000</code></pre>
 </div>
 <div id="---" class="slide section level2">
 <h2>Расчет эффективной границы портфеля</h2>
-<p>+Мы используем функция <code>eff.frontier</code>, которая позволяет находить веса бумаг, максмизирующая показатель Шарпа портфеля. + Она также позволяет задавать ограничения на значения весов. Если не допускается существование коротких позиций в портфеле, то каждый из весов должен быть больше или равен 0. + Мы также можем задать максимальную долю одной бумаги в портфеле (аргумент <code>max.allocation</code>), с тем, чтобы уменьшить концентрацию портфеля.</p>
+<ul>
+<li>Мы используем функция <code>eff.frontier</code>, которая позволяет находить веса бумаг, максмизирующая показатель Шарпа портфеля.</li>
+<li>Она также позволяет задавать ограничения на значения весов. Если не допускается существование коротких позиций в портфеле, то каждый из весов должен быть больше или равен 0.</li>
+<li>Мы также можем задать максимальную долю одной бумаги в портфеле (аргумент <code>max.allocation</code>), с тем, чтобы уменьшить концентрацию портфеля.</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eff &lt;-<span class="st"> </span><span class="kw">eff.frontier</span>(<span class="dt">returns=</span>rtns, <span class="dt">short=</span><span class="st">&quot;no&quot;</span>, <span class="dt">max.allocation=</span>.<span class="dv">50</span>,
                     <span class="dt">risk.premium.up=</span><span class="dv">10</span>, <span class="dt">risk.increment=</span>.<span class="dv">01</span>)
 
 <span class="kw">head</span>(eff)</code></pre></div>
 <pre><code>       GAZP          SBER      GMKN      MGNT      MTSS   Std.Dev
-1 0.2183478 -1.387779e-17 0.1440682 0.3730937 0.2644904 0.3042235
-2 0.1967043 -1.387779e-17 0.1531857 0.3845301 0.2655799 0.3043027
-3 0.1750609  0.000000e+00 0.1623033 0.3959665 0.2666694 0.3045402
-4 0.1534174  0.000000e+00 0.1714209 0.4074028 0.2677589 0.3049356
-5 0.1317740 -6.938894e-18 0.1805384 0.4188392 0.2688484 0.3054882
-6 0.1101305  0.000000e+00 0.1896560 0.4302756 0.2699379 0.3061973
+1 0.2142635  0.000000e+00 0.1446091 0.3882067 0.2529207 0.2863376
+2 0.1941092 -1.387779e-17 0.1565946 0.3966200 0.2526762 0.2864032
+3 0.1739549  0.000000e+00 0.1685801 0.4050332 0.2524317 0.2866000
+4 0.1538007  0.000000e+00 0.1805656 0.4134465 0.2521872 0.2869275
+5 0.1336464  6.938894e-18 0.1925511 0.4218597 0.2519427 0.2873855
+6 0.1134922 -6.938894e-18 0.2045366 0.4302730 0.2516982 0.2879732
   Exp.Return    sharpe
-1  0.1197155 0.3935118
-2  0.1245349 0.4092468
-3  0.1293543 0.4247527
-4  0.1341737 0.4400066
-5  0.1389930 0.4549865
-6  0.1438124 0.4696723</code></pre>
+1 0.05712202 0.1994918
+2 0.06087944 0.2125655
+3 0.06463686 0.2255299
+4 0.06839428 0.2383678
+5 0.07215170 0.2510624
+6 0.07590913 0.2635978</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Find the optimal portfolio</span>
 eff.optimal.point &lt;-<span class="st"> </span>eff[eff<span class="op">$</span>sharpe<span class="op">==</span><span class="kw">max</span>(eff<span class="op">$</span>sharpe),]
 <span class="kw">round</span>(eff.optimal.point,<span class="dv">2</span>)</code></pre></div>
 <pre><code>   GAZP SBER GMKN MGNT MTSS Std.Dev Exp.Return sharpe
-58    0 0.23 0.27  0.5    0    0.33       0.19   0.58</code></pre>
+82    0 0.06 0.44  0.5    0    0.31       0.12   0.39</code></pre>
 <ul>
 <li>Эффективный портфель – тот, который имеет максимальное значения показатель Шарпа.</li>
-<li>В нашем случае это портфель, который состоит из 23% Сбербанка, 27% Норникеля и 50% Магнита.</li>
+<li>В нашем случае это портфель, который состоит из 44% Сбербанк, 27% Норникеля и 50% Магнита.</li>
 <li>Обратите внимание, что доля Магнита равно максимальной доле (выставленное ограничение)</li>
 </ul>
 </div>
 <div id="-" class="slide section level2">
 <h2>Эффективная граница</h2>
 <p>График эффективной границы</p>
+<pre><code>Warning: Ignoring unknown aesthetics: label</code></pre>
 <p><img src="lecture-7_files/figure-slidy/unnamed-chunk-13-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>Отметим отдельные бумаги на графике:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> tab, <span class="kw">aes</span>(<span class="dt">x=</span> Волатильность, <span class="dt">y =</span> Доходность))<span class="op">+</span>
@@ -704,21 +720,36 @@ eff.optimal.point &lt;-<span class="st"> </span>eff[eff<span class="op">$</span>
 eff.optimal.point2 &lt;-<span class="st"> </span>eff2[eff2<span class="op">$</span>sharpe<span class="op">==</span><span class="kw">max</span>(eff2<span class="op">$</span>sharpe),]
 <span class="kw">round</span>(eff.optimal.point2,<span class="dv">2</span>)</code></pre></div>
 <pre><code>    GAZP SBER GMKN MGNT MTSS Std.Dev Exp.Return sharpe
-57 -0.98  0.5  0.5  0.5 0.48    0.43       0.33   0.77</code></pre>
+73 -0.98  0.5  0.5  0.5 0.48    0.41       0.24   0.57</code></pre>
 <p>Оптимальный портфель с короткими позициями предлагает нам занять короткую позицию по Газпром в размере всего портфеля (-98%), все остальные бумаги имеют примерно в равных долях.</p>
 </div>
 <div id="-----" class="slide section level2">
 <h2>Риск-доходность портфеля с короткими позициями</h2>
+<pre><code>Warning: Ignoring unknown aesthetics: label</code></pre>
 <p><img src="lecture-7_files/figure-slidy/unnamed-chunk-16-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>Разрешение занимать короткие позиции позволило повысить доходность портфеля, но и повысило уровень риска. Однако к-т Шарпа для этого портфеля больше (0,77 вместо 0,63).</p>
 </div>
 <div id="-----" class="slide section level2">
 <h2>Ограничение оптимизации портфелей по риск-доходности</h2>
 <ol style="list-style-type: decimal">
-<li>Все оценки доходности и риска, которые мы делали, основывались на исторических данных. Мы знаем, что подобная оптимизация сработала бы в прошлом, но не факт, что она сработает в будущем.</li>
-<li>В классическом варианте оптимизации по Марковицу, мы предполагаем, что доходности имеют нормальное распределение – полностью описываются средним и стандартным отклонением. Однако мы знаем, что доходности не распределены нормально. Есть методы, которые позволяют обойти эти ограничения.</li>
-<li>Оценки ковариаций могут быть не устойчивы во времени (в зависимости от выбора периода анализа и проч.). Можно использовать более сложные методы оценки ковариации, которые будут более устойчивыми.</li>
+<li>Все оценки доходности и риска, которые мы делали, основывались на <strong>исторических данных</strong>. Мы использовали выборочные значения доходностей, дисперсий и ковариационной матрицы (корряляции активов) и предполагали, чтоб они хорошо отражают ожидаемые значения. Это достаточно большое количетсво параметров. Как показывает практика, классифические портфели по Марковицу, максимизирующие показатель Шарпа, являются нестабильными. Существуют другие методы, которые позволяют оценивать ковариационную матрицу, к примеру, <strong>метод Ледуа-Вульфа</strong> ( <em>Ledoit-Wolf, 2003</em> ). По сути это shrinkage метод, который “стабилизирует ковариационную матрицу – возвращает экстремальные значения корряляций к центральным значениям.</li>
+<li>Можно также использовать другие методы для оценок ожидаемых доходностей вместо выборочных исторических доходностей. Одним из таких методов является <strong>метод Джеймса-Стайна</strong> ( <em>James–Stein estimator, 1961</em>), который также основан на идее shrinkage.<br />
+</li>
+<li>В классическом варианте оптимизации по Марковицу, мы предполагаем, что <strong>доходности имеют нормальное распределение</strong> – полностью описываются средним и стандартным отклонением. Однако мы знаем, что доходности не распределены нормально. Есть методы, которые позволяют обойти эти ограничения.</li>
 </ol>
+</div>
+<div id="---etf----" class="slide section level2">
+<h2>Оптимальный портфель из ETF, торгующихся на Московской Бирже</h2>
+<ul>
+<li>портфели доступны и регулярно обновляются на <a href="http://models.fief.ru/shiny/portfolio/" class="uri">http://models.fief.ru/shiny/portfolio/</a></li>
+<li>На Москоской Бирже есть торгуемые биржевые фонды (ETF), доходность которых призвана повторять доходность различных российских и международных биржевых индексов. Преимущества - позволяет “не выбирать” отдельные активы и следить за ними, ниже издержки по сравнению с ПИФами, удобство ликвидности.</li>
+<li>Оценка out-of-sample доходностей различных оптимальных инвестиционных инвестиционных портефелей.</li>
+</ul>
+<p><strong>Global Minimum Variance Portfolio (GMVP)</strong> – портфель, минимизирующий риск портфеля.</p>
+<p><strong>Maximum Sharpe Ratio Portfolio (MSRP)</strong> – портфель, максимизирующий доходность портфеля, скорректированную на его риск (по Марковицу).</p>
+<div align="center">
+<p><img src="fig/portfolio-etf.png" width="653" height="496" /></p>
+</div>
 </div>
 <div id="c--" class="slide section level2">
 <h2>Cписок использованных источников</h2>
@@ -727,6 +758,7 @@ eff.optimal.point2 &lt;-<span class="st"> </span>eff2[eff2<span class="op">$</sp
 <li>Analyzing Financial Data and Implementing Financial Models Using R (Clifford Ang).</li>
 <li><a href="(http://economistatlarge.com/portfolio-theory/introduction-to-portfolio-theory)">“Introduction to Modern Portfolio Theory”</a></li>
 <li><a href="https://faculty.washington.edu/ezivot/econ424/portfoliofunctions.pdf">“Computing Efficient Portfolios”</a> (Eric Zivot)</li>
+<li><a href="http://www.ledoit.net/honey.pdf">Ledoit, Olivier, and Michael Wolf. “Honey, I shrunk the sample covariance matrix.” (2003).</a></li>
 </ol>
 </div>
 

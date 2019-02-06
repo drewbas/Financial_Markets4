@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Салихов Марсель (marcel.salikhov@gmail.com)" />
-  <meta name="date" content="2017-12-11" />
+  <meta name="date" content="2019-01-08" />
   <meta name="copyright" content="НИУ ВШЭ. Салихов Марсель (marcel.salikhov@gmail.com)"/>
   <title>Линейные модели финансовых серий (MA, ARMA и ARIMA)   Количественные финансы</title>
   <style type="text/css">code{white-space: pre;}</style>
@@ -59,7 +59,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   <p class="author">
 Салихов Марсель (<a href="mailto:marcel.salikhov@gmail.com">marcel.salikhov@gmail.com</a>)
   </p>
-  <p class="date">2017-12-11</p>
+  <p class="date">2019-01-08</p>
 </div>
 <div id="-" class="slide section level2">
 <h2>Цели лекции</h2>
@@ -205,12 +205,26 @@ ma2 &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class=
 </div>
 <div id="-" class="slide section level2">
 <h2>Индекс ММВБ</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#library(rusquant)</span>
-<span class="co">#MICEX &lt;- rusquant::getSymbols.Finam(&#39;MICEX&#39;,from = &quot;2001-01-01&quot;) # ммвб</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(quantmod)</code></pre></div>
+<pre><code>Loading required package: xts</code></pre>
+<pre><code>Loading required package: zoo</code></pre>
+<pre><code>
+Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    as.Date, as.Date.numeric</code></pre>
+<pre><code>
+Attaching package: &#39;xts&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:data.table&#39;:
+
+    first, last</code></pre>
+<pre><code>Loading required package: TTR</code></pre>
+<pre><code>Version 0.4-0 included new data defaults. See ?getSymbols.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#MICEX &lt;- rusquant::getSymbols.Finam(&#39;MICEX&#39;,from = &quot;2001-01-01&quot;) # ммвб</span>
 <span class="kw">chartSeries</span>(MICEX, <span class="dt">theme =</span> <span class="st">&#39;white&#39;</span>)</code></pre></div>
 <p><img src="lecture-5_files/figure-slidy/unnamed-chunk-9-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>в логарифмах</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">log.MICEX &lt;-<span class="st"> </span><span class="kw">log</span>(MICEX<span class="op">$</span>MICEX.Close)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">log.MICEX &lt;-<span class="st"> </span><span class="kw">log</span>(MICEX<span class="op">$</span>close)
 <span class="kw">plot</span>(log.MICEX)</code></pre></div>
 <p><img src="lecture-5_files/figure-slidy/unnamed-chunk-10-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Acf</span>(log.MICEX)</code></pre></div>
@@ -219,7 +233,7 @@ ma2 &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class=
 <p><img src="lecture-5_files/figure-slidy/unnamed-chunk-11-2.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>для лог-доходностей</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diff.log.MICEX &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">NA</span>, <span class="kw">diff</span>(log.MICEX))
-<span class="kw">plot</span>(diff.log.MICEX, <span class="dt">type=</span><span class="st">&#39;l&#39;</span>, <span class="dt">col =</span> <span class="dv">2</span>)</code></pre></div>
+<span class="kw">plot</span>(diff.log.MICEX, <span class="dt">type =</span><span class="st">&#39;l&#39;</span>, <span class="dt">col =</span> <span class="dv">2</span>)</code></pre></div>
 <p><img src="lecture-5_files/figure-slidy/unnamed-chunk-12-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Acf</span>(diff.log.MICEX)</code></pre></div>
 <p><img src="lecture-5_files/figure-slidy/unnamed-chunk-13-1.png" width="1152" style="display: block; margin: auto;" /></p>

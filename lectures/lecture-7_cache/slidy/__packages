@@ -1,5 +1,6 @@
 base
 RevoUtilsMath
+RevoUtils
 RColorBrewer
 knitr
 zoo
@@ -10,14 +11,9 @@ bitops
 RCurl
 XML
 rusquant
-timeDate
 forecast
-data.table
-scales
-ggplot2
-tidyr
-Ecfun
-Ecdat
-quadprog
 PerformanceAnalytics
+data.table
 QuantTools
+ggplot2
+quadprog
