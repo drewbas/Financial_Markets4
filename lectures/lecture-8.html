@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Салихов Марсель (marcel.salikhov@gmail.com)" />
-  <meta name="date" content="2017-11-16" />
+  <meta name="date" content="2019-02-18" />
   <meta name="copyright" content="НИУ ВШЭ. Салихов Марсель (marcel.salikhov@gmail.com)"/>
   <title>СAPM – Capital Asset Pricing Model   Количественные финансы</title>
   <style type="text/css">code{white-space: pre;}</style>
@@ -59,7 +59,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   <p class="author">
 Салихов Марсель (<a href="mailto:marcel.salikhov@gmail.com">marcel.salikhov@gmail.com</a>)
   </p>
-  <p class="date">2017-11-16</p>
+  <p class="date">2019-02-18</p>
 </div>
 <div id="-" class="slide section level2">
 <h2>Цели лекции</h2>
@@ -212,19 +212,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Коэффициент бета можно рассчитать с помощью обычной линейной регрессии в R:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># OnDate &lt;- start.date &lt;- as.Date(&#39;2010-01-01&#39;)</span>
 <span class="co"># ToDate &lt;- end.date &lt;- Sys.Date()</span>
-<span class="co"># ROSN &lt;- rusquant::getSymbols.Finam(&#39;ROSN&#39;, from = start.date) # роснефть</span>
-<span class="co"># MICEX &lt;- rusquant::getSymbols.Finam(&#39;MICEX&#39;, from = start.date) # ммвб</span>
-<span class="co"># </span>
-<span class="co"># ROSN.rtn &lt;- diff(log(ROSN$ROSN.Close))</span>
-<span class="co"># MICEX.rtn &lt;- diff(log(MICEX$MICEX.Close))</span>
-<span class="co"># </span>
-<span class="co"># # получить безрисковкую ставку (1-летние ОФЗ)</span>
+<span class="co"># ROSN &lt;- QuantTools::get_finam_data(&#39;ROSN&#39;, from = start.date, to = end.date) # индекс ММВБ </span>
+<span class="co"># ROSN &lt;- quant_tools_to_xts(ROSN)</span>
+<span class="co"># MICEX &lt;- QuantTools::get_finam_data(&#39;MICEX&#39;, from = start.date, to = end.date) # индекс ММВБ </span>
+<span class="co"># MICEX &lt;- quant_tools_to_xts(MICEX)</span>
+<span class="co"># ROSN.rtn &lt;- diff(log(ROSN$close))</span>
+<span class="co"># MICEX.rtn &lt;- diff(log(MICEX$close))</span>
+<span class="co"># # </span>
+<span class="co"># # # получить безрисковкую ставку (1-летние ОФЗ)</span>
 <span class="co"># source(&#39;https://raw.githubusercontent.com/quantviews/CBR/master/codes_new/CBR_web.R&#39;)</span>
-<span class="co"># rf_rate &lt;- Isoterm(start.date,end.date,I_Day = 1)</span>
-<span class="co"># </span>
-<span class="co"># rf_rate_d &lt;- (100+rf_rate)^(1/365)-1</span>
+<span class="co"># rf_rate &lt;- MosPrimeXML(start.date,end.date)</span>
+<span class="co"># rf_rate_d &lt;- (100+rf_rate$T1W)^(1/365)-1</span>
 
-<span class="kw">plot</span>(rf_rate, <span class="dt">main =</span> <span class="st">&#39;Безрисковая ставка (1-летняя ставка ОФЗ)&#39;</span>)</code></pre></div>
+<span class="kw">plot</span>(rf_rate_d, <span class="dt">main =</span> <span class="st">&#39;Безрисковая ставка (Mosprime)&#39;</span>)</code></pre></div>
 <p><img src="lecture-8_files/figure-slidy/unnamed-chunk-3-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ex_rosn_rtns &lt;-<span class="st"> </span>ROSN.rtn <span class="op">-</span><span class="st"> </span>rf_rate_d
 ex_micex_rtns &lt;-<span class="st"> </span>MICEX.rtn <span class="op">-</span><span class="st"> </span>rf_rate_d
@@ -237,19 +237,19 @@ lm(formula = ex_rosn_rtns ~ ex_micex_rtns)
 
 Residuals:
       Min        1Q    Median        3Q       Max 
--0.046727 -0.006698 -0.000729  0.006038  0.060207 
+-0.051107 -0.007255 -0.000836  0.006392  0.103810 
 
 Coefficients:
                Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)   8.833e-05  3.665e-04   0.241     0.81    
-ex_micex_rtns 1.009e+00  2.003e-02  50.377   &lt;2e-16 ***
+(Intercept)   0.0013127  0.0002704   4.854 1.27e-06 ***
+ex_micex_rtns 1.0966439  0.0115938  94.589  &lt; 2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 0.01115 on 1775 degrees of freedom
-  (1 observation deleted due to missingness)
-Multiple R-squared:  0.5884,    Adjusted R-squared:  0.5882 
-F-statistic:  2538 on 1 and 1775 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.01232 on 2978 degrees of freedom
+  (28 observations deleted due to missingness)
+Multiple R-squared:  0.7503,    Adjusted R-squared:  0.7502 
+F-statistic:  8947 on 1 and 2978 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Интерпретация:</p>
 <ol style="list-style-type: decimal">
 <li><p>Значение t-статистики при константе равно 0,24. Мы не можем отвергнуть гипотезу о том, что значение коэффициента не равно нулю.</p></li>
@@ -268,18 +268,25 @@ lm(formula = ex_rosn_rtns ~ ex_micex_rtns + 0)
 
 Residuals:
       Min        1Q    Median        3Q       Max 
--0.046714 -0.006652 -0.000700  0.006056  0.059870 
+-0.053496 -0.006225  0.000014  0.007282  0.112550 
 
 Coefficients:
               Estimate Std. Error t value Pr(&gt;|t|)    
-ex_micex_rtns  1.00587    0.01445   69.59   &lt;2e-16 ***
+ex_micex_rtns 1.065613   0.009709   109.8   &lt;2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 0.01115 on 1776 degrees of freedom
-  (1 observation deleted due to missingness)
-Multiple R-squared:  0.7317,    Adjusted R-squared:  0.7315 
-F-statistic:  4843 on 1 and 1776 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.01236 on 2979 degrees of freedom
+  (28 observations deleted due to missingness)
+Multiple R-squared:  0.8017,    Adjusted R-squared:  0.8017 
+F-statistic: 1.205e+04 on 1 and 2979 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(xts)</code></pre></div>
+<pre><code>Loading required package: zoo</code></pre>
+<pre><code>
+Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    as.Date, as.Date.numeric</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">coredata</span>(ex_micex_rtns), <span class="kw">coredata</span>(ex_rosn_rtns), 
      <span class="dt">xlab =</span> <span class="st">&#39;избыточная доходность индекса ММВБ&#39;</span>, <span class="dt">ylab =</span> <span class="st">&#39;избыточная доходность Роснефти&#39;</span>)
 <span class="kw">abline</span>(<span class="kw">lm</span>(ex_rosn_rtns <span class="op">~</span><span class="st"> </span>ex_micex_rtns <span class="op">+</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
@@ -290,18 +297,18 @@ F-statistic:  4843 on 1 and 1776 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Пакет <code>PerformanceAnalytics</code> предоставляет удобные функции для расчета различных параметров модели CAPM:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(PerformanceAnalytics)
 
-<span class="kw">CAPM.beta</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate)</code></pre></div>
-<pre><code>[1] 1.009478</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">CAPM.alpha</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate)</code></pre></div>
-<pre><code>[1] 0.009556679</code></pre>
+<span class="kw">CAPM.beta</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d)</code></pre></div>
+<pre><code>[1] 1.094767</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">CAPM.alpha</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d)</code></pre></div>
+<pre><code>[1] 0.001258904</code></pre>
 </div>
 <div id="---rolling-beta----performanceanalytics" class="slide section level2">
 <h2>Расчет скользящей беты (rolling <span class="math inline">\(\beta\)</span>) с помощью пакета PerformanceAnalytics</h2>
 <p>Пакет <code>PerformanceAnalytics</code> дает возможность быстро делать “скользящие” оценки коэффициентов – то есть мы каждый раз используем лишь X предыдущих значений для расчетов (в данном случаем X = 250, это примерно расчет за последние 365 календарных дней)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chart.RollingRegression</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate,<span class="dt">width =</span> <span class="dv">250</span>, <span class="dt">attribute =</span> <span class="st">&quot;Beta&quot;</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chart.RollingRegression</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d,<span class="dt">width =</span> <span class="dv">250</span>, <span class="dt">attribute =</span> <span class="st">&quot;Beta&quot;</span>,
                         <span class="dt">main =</span> <span class="st">&#39;Скользящая бета для акций Роснефти&#39;</span>)</code></pre></div>
 <p><img src="lecture-8_files/figure-slidy/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chart.RollingRegression</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate,<span class="dt">width =</span> <span class="dv">250</span>, <span class="dt">attribute =</span> <span class="st">&quot;Alpha&quot;</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chart.RollingRegression</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d,<span class="dt">width =</span> <span class="dv">250</span>, <span class="dt">attribute =</span> <span class="st">&quot;Alpha&quot;</span>,
                         <span class="dt">main =</span> <span class="st">&#39;Скользящая альфа для акций Роснефти&#39;</span>)</code></pre></div>
 <p><img src="lecture-8_files/figure-slidy/unnamed-chunk-6-2.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>Одна из проблем с использованием CAPM – по факту оценки коэффициентов не являются устойчивыми во времени.</p>
@@ -370,7 +377,7 @@ F-statistic:  4843 on 1 and 1776 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Настоящие портфели имеют плоское соотношение между бетой и ожидаемой доходностью.</p>
 </div>
 <div id="----" class="slide section level2">
-<h2>Трехфакторня модель Фамы и Френча</h2>
+<h2>Трехфакторная модель Фамы и Френча</h2>
 <ul>
 <li>В ответ на эмпирические проблемы CAPM, Eugene Fama и Kenneth French предложили с 1992 году ее модификацию - так называемую трех-факторную модель Fama-French model.</li>
 </ul>
