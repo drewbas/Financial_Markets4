@@ -11,8 +11,5 @@ xts
 TTR
 quantmod
 plotly
-bindrcpp
 nortest
 tseries
-RevoUtilsMath
-RevoUtils
