@@ -84,16 +84,35 @@ load('../.RData')
 + Однако MA-модель порядка $q$ "видит"" последние q шоков, в то время как AR(p) модель будет учитывать все предыдущие шоки с последовательным убыванием. 
 
 
+
+## Пример с пирожками
+
+У вас небольшой бизнес - вы каждый день продаете голодным студентам пирожки на перемене. Каждый день вам необходимо сделать заказ в пекарне, которая привезет вас с утра пирожки на следующий день ($t+1$).
+
+
+<div align="center">
+  <img src="fig/пирожки.jpg" width="580" height="450" />
+</div>
+
+Какой подход вы можете использовать? 
+
+К примеру, вы можете использовать следующий подход. Базово вы заказываете 20 пирожков, а также учитываете информацию о том, сколько у вас осталось или не хватило пирожков в предыдущий день. 
+
+Пример в Excel. 
+
+
 ## Определение MA-модели 
 
 Если серия временного ряда ${x_t}$ является моделью скользящего среднего порядка $q$ (MA(q)), то это означает, что 
 
-$$ x_t = w_t + \beta_1 w_{t-1} + \ldots + \beta_q w_{t-q} $$
+$$ x_t = \beta_0 + \beta_1 \epsilon_{t-1} + \ldots + \beta_q \epsilon_{t-q} + \epsilon_t $$
 где ${w_t}$ -- это белый шум с $E(w_t)=0$ и дисперсией $\sigma^2$.
 
 + MA-модель всегда стационарна 
 + В MA-модель можно включать константу
 + Обычно модели MA оценивают методом максимального правдоподобия (или другими численными методами). Аналитическая оценка затруднена. 
+
+
 
 ## MA(1) модель 
 
@@ -193,8 +212,8 @@ Pacf(ma2)
 
 ## Индекс ММВБ
 
-```{r}
-#library(rusquant)
+```{r, cache=FALSE, warning=FALSE, message=FALSE}
+library(quantmod)
 #MICEX <- rusquant::getSymbols.Finam('MICEX',from = "2001-01-01") # ммвб
 chartSeries(MICEX, theme = 'white')
 
@@ -203,14 +222,14 @@ chartSeries(MICEX, theme = 'white')
 
 в логарифмах
 
-```{r}
-log.MICEX <- log(MICEX$MICEX.Close)
+```{r, cache=FALSE}
+log.MICEX <- log(MICEX$close)
 plot(log.MICEX)
 
 ```
 
 
-```{r}
+```{r, cache=FALSE}
 Acf(log.MICEX)
 Pacf(log.MICEX)
 
@@ -218,10 +237,10 @@ Pacf(log.MICEX)
 
 для лог-доходностей
 
-```{r}
+```{r, cache=FALSE}
 
 diff.log.MICEX <- c(NA, diff(log.MICEX))
-plot(diff.log.MICEX, type='l', col = 2)
+plot(diff.log.MICEX, type ='l', col = 2)
 ```
 
 
@@ -259,7 +278,7 @@ plot(micex.ma$residuals)
 ```{r}
 micex.ma <- arima(diff.log.MICEX, order=c(0, 0, 2))
 micex.ma
-acf(micex.ma$res[-(1:2)])
+Acf(micex.ma$res[-(1:2)])
 ```
 
 + MA(2)-модель позволила "убрать" автокорреляцию на лаге 2, но автокорреляция на других лагах сохранилась. 
@@ -271,7 +290,7 @@ acf(micex.ma$res[-(1:2)])
 ```{r}
 micex.ma <- arima(diff.log.MICEX, order=c(0, 0, 3))
 micex.ma
-acf(micex.ma$res[-(1:2)])
+Acf(micex.ma$res[-(1:2)])
 ```
 
 + Построение MA(3)-модели не позволило улучшить автокоррелограмму. 
@@ -304,7 +323,7 @@ $$ AIC = -2log(L) + 2k $$
 
 BIC рассчитывается как: 
 
-$$ BIC = -2log(L) + k log(n) $$
+$$ BIC = -2 \cdot log(L) + k \cdot log(n) $$
 где $n$ - количество наблюдений в рассматриваемой серии.
 
 + AIC и BIC могут указывать на разные модели как "лучшие" и противоречить друг другу
@@ -315,7 +334,7 @@ $$ BIC = -2log(L) + k log(n) $$
 + AR-модели учитывают прошлое поведение (лаги) в качестве входных параметров. С сутевой точки зрения это позволяет учитывать некоторые особенности поведения участников финансового рынка рынка, такое как mean reversion (возвращение к среднему) или momentum (инерционность финансовых рынков -- после роста сохраняется тенденция к росту, и -- наоборот). 
 + MA-модели используются для оценки "информационных шоков" в серии. К примеру, такими шоками могут быть неожиданные события или поступление новой информации (выход квартальной финансовой отчетности) и так далее. То есть, MA-модель позволяет оценивать единовременную реакцию серии на шоки.  
 + ARMA-модели учитывают оба этих аспекта при моделировании финансовых серий. 
-+ ARMA-модели в принципе не учитывают эффекты "кластеризации волатильности". Это не условные гетероскедастичные модели. Мы считаем, что дисперсия является постоянной в ARMA-моделях.  
++ ARMA-модели в принципе не учитывают эффекты "кластеризации волатильности". Это не условные гетероскедастичные модели. Мы считаем, что дисперсия является **постоянной** в ARMA-моделях.  
 
 ## Определение ARMA-модели 
 
@@ -366,33 +385,86 @@ confint(arima(x, order=c(2, 0, 2)))
 
 + Доверительные интервалы содержат настоящие значения параметров ar=c(0.5, -0.25), ma=c(0.5, -0.3), но являются достаточно широкими 
 
-## Построение ARMA-моделей 
+## Drift (смещение)
+
+```{r}
+n   <- 150
+eps <- rnorm(n)
+x0  <- rep(0, n)
+for(i in 2:n){
+  x0[i] <- x0[i-1] + eps[i]
+}
+plot(ts(x0), main = 'Случайное блуждание')
+```
+
+
+случайное блуждание со смещением 
+
+```{r}
+drift <- 0.5
+x1    <- rep(0, n)
+for(i in 2:n){
+  x1[i] <- drift + x1[i-1] + eps[i]
+}
+plot(ts(x1), main = 'Cлучайное блуждание со смещением')
+```
+
+случайное блуждение с линейным трендом 
+
+```{r}
+trend <- seq_len(n)*0.05
+x2    <- rep(0, n)
+for(i in 2:n){
+  x2[i] <- trend[i] + x2[i-1] + eps[i]
+}
+plot(ts(x2), main = 'Линейный тренд и случайное блуждание')
+```
+
+мы обычно переходили от модели в уровнях (лог-цены) к разностям (лог-доходности) для того, чтобы обеспечить стационарность данных.
+
+Модель случайного блуждания "в уровнях" по сути представляет собой AR(1) модель с коэффициентом 1. Уравнение можно записать по другому
+
+$$x_t  - x_{t-1} = \mu $$
+или
+
+$$x_t = x_{t-1} + \mu $$
+где $\mu$ - это смещение (drift). При расчете разностей модели будут идентичны. 
+
+## Построение ARIMA-моделей 
+
++ Серия ${x_t}$ является $ARIMA(p,d,q)$ моделью, если $\Delta^d x_t$ является моделью $ARMA(p,q)$. 
++ К примеру, если лог-доходности моделируются ARMA(p,q), то лог-цены будут ARIMA(p,1,q). 
++ Random walk является моделью ARIMA(0,1,0), а белый шум -- моделью ARIMA(0,0,0). 
+
+
+
+## ARIMA модели для индекса ММВБ
 
 
 Построим несколько моделей для доходностей индекса ММВБ
 
 ```{r,cache=TRUE }
 # без константы (сводобного члена)
-fit.00 <- Arima(diff.log.MICEX, c(0, 0, 0), include.drift=FALSE)
-fit.01 <- Arima(diff.log.MICEX, c(0, 0, 1), include.drift=FALSE)
-fit.02 <- Arima(diff.log.MICEX, c(0, 0, 2), include.drift=FALSE)
-fit.10 <- Arima(diff.log.MICEX, c(1, 0, 0), include.drift=FALSE)
-fit.11 <- Arima(diff.log.MICEX, c(1, 0, 1), include.drift=FALSE)
-fit.12 <- Arima(diff.log.MICEX, c(1, 0, 2), include.drift=FALSE)
-fit.20 <- Arima(diff.log.MICEX, c(2, 0, 0), include.drift=FALSE)
-fit.21 <- Arima(diff.log.MICEX, c(2, 0, 1), include.drift=FALSE)
-fit.22 <- Arima(diff.log.MICEX, c(2, 0, 2), include.drift=FALSE)
+fit.00 <- Arima(MICEX_log, c(0, 1, 0), include.drift=FALSE)
+fit.01 <- Arima(MICEX_log, c(0, 1, 1), include.drift=FALSE)
+fit.02 <- Arima(MICEX_log, c(0, 1, 2), include.drift=FALSE)
+fit.10 <- Arima(MICEX_log, c(1, 1, 0), include.drift=FALSE)
+fit.11 <- Arima(MICEX_log, c(1, 1, 1), include.drift=FALSE)
+fit.12 <- Arima(MICEX_log, c(1, 1, 2), include.drift=FALSE)
+fit.20 <- Arima(MICEX_log, c(2, 1, 0), include.drift=FALSE)
+fit.21 <- Arima(MICEX_log, c(2, 1, 1), include.drift=FALSE)
+fit.22 <- Arima(MICEX_log, c(2, 1, 2), include.drift=FALSE)
 
 # с константой 
-fit.00c <- Arima(diff.log.MICEX, c(0, 0, 0), include.drift=TRUE)
-fit.01c <- Arima(diff.log.MICEX, c(0, 0, 1), include.drift=TRUE)
-fit.02c <- Arima(diff.log.MICEX, c(0, 0, 2), include.drift=TRUE)
-fit.10c <- Arima(diff.log.MICEX, c(1, 0, 0), include.drift=TRUE)
-fit.11c <- Arima(diff.log.MICEX, c(1, 0, 1), include.drift=TRUE)
-fit.12c <- Arima(diff.log.MICEX, c(1, 0, 2), include.drift=TRUE)
-fit.20c <- Arima(diff.log.MICEX, c(2, 0, 0), include.drift=TRUE)
-fit.21c <- Arima(diff.log.MICEX, c(2, 0, 1), include.drift=TRUE)
-fit.22c <- Arima(diff.log.MICEX, c(2, 0, 2), include.drift=TRUE)
+fit.00c <- Arima(MICEX_log, c(0, 1, 0), include.drift=TRUE)
+fit.01c <- Arima(MICEX_log, c(0, 1, 1), include.drift=TRUE)
+fit.02c <- Arima(MICEX_log, c(0, 1, 2), include.drift=TRUE)
+fit.10c <- Arima(MICEX_log, c(1, 1, 0), include.drift=TRUE)
+fit.11c <- Arima(MICEX_log, c(1, 1, 1), include.drift=TRUE)
+fit.12c <- Arima(MICEX_log, c(1, 1, 2), include.drift=TRUE)
+fit.20c <- Arima(MICEX_log, c(2, 1, 0), include.drift=TRUE)
+fit.21c <- Arima(MICEX_log, c(2, 1, 1), include.drift=TRUE)
+fit.22c <- Arima(MICEX_log, c(2, 1, 2), include.drift=TRUE)
 
 ```
 
@@ -444,7 +516,7 @@ models[which(models$aicc == min(models$aicc)),]
 выбрали "вторую" лучшую модель по критерию AIC
 
 ```{r}
-fit.best <- Arima(diff.log.MICEX, c(2, 0, 0), include.drift=TRUE)
+fit.best <- Arima(MICEX_log, c(2, 1, 0), include.drift=TRUE)
 print(fit.best)
 
 
@@ -512,7 +584,7 @@ plot(fcst$mean)
 + Пакет forecast позволяет автоматически находить лучшие спецификации ARMA моделей 
 
 ```{r}
-fit1 <- auto.arima(diff.log.MICEX, ic = 'aicc')
+fit1 <- auto.arima(MICEX_log, ic = 'aicc')
 fit1
 fcst <- forecast(fit1, h=100, level=95, fan = TRUE)
 plot(forecast(fit1, h=100, level=95, fan = TRUE), col=2)
@@ -523,20 +595,16 @@ plot(fcst$mean[1:50], type  = 'l')
 + Мы "нашли" вручную модель ARMA(2,1) или ARMA(2,0), в то время как 'auto.arima` предлагает нам модель ARMA(4,0). 
 
 
-## ARIMA-модели
-
-+ Серия ${x_t}$ является $ARIMA(p,d,q)$ моделью, если $\Delta^d x_t$ является моделью $ARMA(p,q)$. 
-+ К примеру, если лог-доходности моделируются ARMA(p,q), то лог-цены будут ARIMA(p,1,q). 
-+ Random walk является моделью ARIMA(0,1,0), а белый шум -- моделью ARIMA(0,0,0). 
+## auto.arima из пакета forecast
 
 мы также можем находить модели и строить прогнозы для нестационарных серий c помощью `auto.arima`
 
 ```{r}
-fit2 <- auto.arima(log.MICEX, ic = 'aicc')
+fit2 <- auto.arima(MICEX_log, ic = 'aicc')
 fit2
 plot(forecast(fit2, h=100, level=95, fan = TRUE), col=2)
 
-fit2 <- auto.arima(log.MICEX, ic = 'aicc', allowdrift = FALSE,allowmean = TRUE, lambda=NULL)
+fit2 <- auto.arima(MICEX_log, ic = 'aicc', allowdrift = FALSE,allowmean = TRUE, lambda=NULL)
 plot(forecast(fit2, h=100, level=95, fan = TRUE), col=2)
 ```
 
@@ -558,4 +626,4 @@ plot(forecast(fit2, h=100, level=95, fan = TRUE), col=2)
 2. "Statistics and Data Analysis for Financial Engineering" (David Ruppert & David Matteson)
 3. Analyzing Financial Data and Implementing Financial Models Using R (Clifford Ang)
 4. Forecasting Financial Time Series (Patrick Perry)
-5. Autoregressive Moving Average ARMA(p, q) Models for Time Series Analysis (Michael Halls-Moore)
+
