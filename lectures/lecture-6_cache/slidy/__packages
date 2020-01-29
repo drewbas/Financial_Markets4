@@ -1,6 +1,4 @@
 base
-RevoUtilsMath
-RevoUtils
 RColorBrewer
 knitr
 data.table
@@ -11,10 +9,10 @@ timeDate
 timeSeries
 fBasics
 fGarch
+rugarch
 zoo
 xts
 TTR
 quantmod
 highcharter
 FinTS
-rugarch
