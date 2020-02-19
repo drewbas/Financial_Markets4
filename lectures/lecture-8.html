@@ -7,49 +7,76 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Салихов Марсель (marcel.salikhov@gmail.com)" />
-  <meta name="date" content="2019-02-18" />
+  <meta name="date" content="2020-02-11" />
   <meta name="copyright" content="НИУ ВШЭ. Салихов Марсель (marcel.salikhov@gmail.com)"/>
-  <title>СAPM – Capital Asset Pricing Model   Количественные финансы</title>
+  <title>СAPM – Capital Asset Pricing Model   “Количественные финансы”</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
   <link href="libs/slidy-2/styles/slidy.css" rel="stylesheet" />
   <script src="libs/slidy-2/scripts/slidy.js"></script>
+  <script src="libs/slidy_shiny-1/slidy_shiny.js"></script>
   <link rel="stylesheet" type="text/css" media="screen, projection, print"
    href="styles.css" />
 </head>
@@ -57,12 +84,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="slide titlepage">
   <h1 class="title">СAPM – Capital Asset Pricing Model <br> “Количественные финансы”</h1>
   <p class="author">
-Салихов Марсель (<a href="mailto:marcel.salikhov@gmail.com">marcel.salikhov@gmail.com</a>)
+Салихов Марсель (<a href="mailto:marcel.salikhov@gmail.com" class="email">marcel.salikhov@gmail.com</a>)
   </p>
-  <p class="date">2019-02-18</p>
+  <p class="date">2020-02-11</p>
 </div>
-<div id="-" class="slide section level2">
-<h2>Цели лекции</h2>
+<div id="цели-лекции" class="slide section level2">
+<h1>Цели лекции</h1>
 <ul>
 <li>понять теоретические основы CAPM</li>
 <li>применение CAPM для оценки эффективности портфельных инвестиций</li>
@@ -73,7 +100,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 </div>
 <div id="capm" class="slide section level2">
-<h2>CAPM</h2>
+<h1>CAPM</h1>
 <ul>
 <li>Модель CAPM (Capital Asset Pricing Model) – одна из наиболее известных и используемых моделей в финансах.</li>
 <li>CAPM дала теоретические основания для распространения пассивного инвестирования.</li>
@@ -82,8 +109,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Модель CAPM широко используется на практике, но есть серьезные проблемы с ее эмпирической поддержкой.</li>
 </ul>
 </div>
-<div id="apm-" class="slide section level2">
-<h2>СAPM – возникновение</h2>
+<div id="сapm-возникновение" class="slide section level2">
+<h1>СAPM – возникновение</h1>
 <ul>
 <li>В 1990 году Уильям Шарм получил Нобелевскую премию по экономике за работу по CAPM, опубликованную в 1964 году <strong>(Sharpe, William F. “Capital asset prices: A theory of market equilibrium under conditions of risk.” The journal of Finance 19.3 (1964): 425-442.)</strong></li>
 <li>Другие авторы, примерно в это же время работавшие над этой темой независимо от Шарпа, получившие аналогичные результаты – Джон Линтнер, Джек Трейнор и Ян Моссин.</li>
@@ -93,8 +120,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><img src="fig/william-sharpe.jpg" width="540" height="767" /></p>
 </div>
 </div>
-<div id="--capm" class="slide section level2">
-<h2>Основополагающая идея CAPM</h2>
+<div id="основополагающая-идея-capm" class="slide section level2">
+<h1>Основополагающая идея CAPM</h1>
 <ul>
 <li>Основная революционная идея CAPM заключалась в том, что премия за риск отдельной ценной бумаги не связана с ее “индивидуальным риском”.</li>
 </ul>
@@ -104,8 +131,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Рыночной портфель – и есть оптимальный портфель по Марковицу (mean-variance).</li>
 </ul>
 </div>
-<div class="slide section level2">
-<h2>Допущения</h2>
+<div id="допущения" class="slide section level2">
+<h1>Допущения</h1>
 <p>CAPM строится с представления о том, какие бы были премии за риск для акций, если выполняются следующие допущения:</p>
 <ol style="list-style-type: decimal">
 <li><strong>Цены находятся в равновесии</strong>. Для каждой бумаги спрос равен предложению.</li>
@@ -115,8 +142,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ol>
 <p>Исходя из допущения №3, следует, что рыночной портфель является аппроксимацией тангенциального портфеля.</p>
 </div>
-<div id="--market-portfolio" class="slide section level2">
-<h2>Рыночный портфель (market portfolio)</h2>
+<div id="рыночный-портфель-market-portfolio" class="slide section level2">
+<h1>Рыночный портфель (market portfolio)</h1>
 <ul>
 <li>Исходя из приведенных предпосылок и с учетом того, что относительное количество рискованных активов у каждого инвестора оказывается одинаковым, фондовый рынок может находиться в равновесии в случае, если эти оптимальные пропорции соответствуют пропорциям, в которых активы представлены на рынке.</li>
 <li>Портфель, состоящий из всех имеющихся ценных бумаг, пропорции инвестирования в которые соответствуют их доли в общей рыночной капитализации, называется <strong>рыночным портфелем</strong>.</li>
@@ -127,7 +154,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><strong>Важно: CAPM соблюдается, если верны допущения</strong></p>
 </div>
 <div id="capital-market-line-cml" class="slide section level2">
-<h2>Capital Market Line (CML)</h2>
+<h1>Capital Market Line (CML)</h1>
 <p><strong>capital market line</strong> связывает дополнительную ожидаемую доходность эффективного портфеля и его риск.</p>
 <p><strong>Ожидаемая избыточная доходность</strong> – это ожидаемая доходность минус безрисковая ставка, она также называется <strong>риск-премия</strong>.</p>
 <p><span class="math display">\[r_P = r_f + \frac{r_M - r_f}{\sigma_M}\sigma_P \]</span></p>
@@ -140,15 +167,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><span class="math inline">\(r_f, r_M, \sigma_M\)</span> – константы, что меняется в этом уравнении это – <span class="math inline">\(r_P, \sigma_P\)</span>, то есть соотношение рыночного портфеля и рискового актива в портфеле.</p>
 <p><img src="lecture-8_files/figure-slidy/unnamed-chunk-1-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
-<div id="--cml" class="slide section level2">
-<h2>Угол наклона CML</h2>
+<div id="угол-наклона-cml" class="slide section level2">
+<h1>Угол наклона CML</h1>
 <p>Угол наклона CML равен:</p>
 <p><span class="math display">\[ \frac{r_M - r_f}{\sigma_M}\]</span></p>
 <p>Угол наклона можно интерпретировать как отношение премии за риск к стандартному отклонению рыночного портфеля – уже известный нам <strong>показатель Шарпа (Sharpe Ratio)</strong>.</p>
 <p><strong>Следствие – все эффективные портфели имеют тот же показатель Шарпа, что и рыночной портфель</strong></p>
 </div>
-<div id="-cml" class="slide section level2">
-<h2>Пример CML</h2>
+<div id="пример-cml" class="slide section level2">
+<h1>Пример CML</h1>
 <p>Рассмотрим линию рынка капитала (CML), если <span class="math inline">\(r_f = 0,06; r_M= 0,15; \sigma_M = 0,22\)</span>.</p>
 <div align="center">
 <p><img src="fig/cml-example.png" width="695" height="476" /></p>
@@ -158,15 +185,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Добавление CAPM – рыночный портфель является эффективным. Нам нет необходимости искать веса в оптимальном портфеле, можно просто использовать долю рыночной капитализации компании в общем индексе.</li>
 </ul>
 </div>
-<div id="--apm" class="slide section level2">
-<h2>Следствия из СAPM</h2>
+<div id="следствия-из-сapm" class="slide section level2">
+<h1>Следствия из СAPM</h1>
 <ol style="list-style-type: decimal">
 <li>Для большинства инвесторов результаты пассивной стратегии (комбинирование безрисковых активов с вложениями в пассивные инвестиционные фонды, реплицирующих широкий индекс) – так же хороши, как если бы вели активный поиск доходных ценных бумаг.</li>
 <li>Премия за риск для каждой отдельной бумаги пропорциональна только ее вкладу в совокупный риск всего рыночного портфеля. Премия за риск не зависит от риска, присущего ей в отдельности.</li>
 </ol>
 </div>
 <div id="security-market-line" class="slide section level2">
-<h2>Security Market Line</h2>
+<h1>Security Market Line</h1>
 <ul>
 <li><strong>Security market line (SML)</strong> связывает избыточную доходность актива с его его углом наклона к рыночному портфелю.</li>
 <li>SML отличается от CML в том смысле, что SML применима для любого актива, в то время как CML применима только к эффективным портфелям.</li>
@@ -177,8 +204,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Уравнение SML и есть базовое уравнение модели CAPM.</li>
 </ul>
 </div>
-<div id="-beta" class="slide section level2">
-<h2>Бета (<span class="math inline">\(\beta\)</span>)</h2>
+<div id="бета-beta" class="slide section level2">
+<h1>Бета (<span class="math inline">\(\beta\)</span>)</h1>
 <ul>
 <li>Риск эффективного портфеля определяется величиной <span class="math inline">\(\sigma_M\)</span>.</li>
 <li>Общая мера присущего ценной бумаги риска (систематического риска) в рамках CAPM задается коэффициентом “бета”.</li>
@@ -189,8 +216,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><span class="math display">\[\sigma_M^2 = \sum w_i Cov(r_i, r_m) \]</span></p>
 <p>где <span class="math inline">\(w_i\)</span> – доля i-ого актива в рыночном портфеле.</p>
 </div>
-<div id="-" class="slide section level2">
-<h2>Интепретация беты</h2>
+<div id="интепретация-беты" class="slide section level2">
+<h1>Интепретация беты</h1>
 <p>Значения беты дают возможность интерпретировать риск актива (портфеля):</p>
 <p><span class="math inline">\(\beta &gt; 1\)</span> – агрессивный актив (портфель);</p>
 <p><span class="math inline">\(\beta = 1\)</span> – средний уровень риска;</p>
@@ -200,56 +227,56 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <p>В данном случае акция J находится ниже границы SML. СAPM прогнозирует, что цена бумаги J будет снижаться пока она вновь не окажется на линии SML.</p>
 </div>
-<div id="----" class="slide section level2">
-<h2>Отраслевые беты для американских компаний</h2>
+<div id="отраслевые-беты-для-американских-компаний" class="slide section level2">
+<h1>Отраслевые беты для американских компаний</h1>
 <div align="center">
 <p><img src="fig/us-beta.png" width="945" height="650" /></p>
 </div>
 <p>Источник: <a href="http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/Betas.html">Betas by Sector (US), by Aswath Damodaran</a></p>
 </div>
-<div id="---r" class="slide section level2">
-<h2>Расчет беты в R</h2>
+<div id="расчет-беты-в-r" class="slide section level2">
+<h1>Расчет беты в R</h1>
 <p>Коэффициент бета можно рассчитать с помощью обычной линейной регрессии в R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># OnDate &lt;- start.date &lt;- as.Date(&#39;2010-01-01&#39;)</span>
-<span class="co"># ToDate &lt;- end.date &lt;- Sys.Date()</span>
-<span class="co"># ROSN &lt;- QuantTools::get_finam_data(&#39;ROSN&#39;, from = start.date, to = end.date) # индекс ММВБ </span>
-<span class="co"># ROSN &lt;- quant_tools_to_xts(ROSN)</span>
-<span class="co"># MICEX &lt;- QuantTools::get_finam_data(&#39;MICEX&#39;, from = start.date, to = end.date) # индекс ММВБ </span>
-<span class="co"># MICEX &lt;- quant_tools_to_xts(MICEX)</span>
-<span class="co"># ROSN.rtn &lt;- diff(log(ROSN$close))</span>
-<span class="co"># MICEX.rtn &lt;- diff(log(MICEX$close))</span>
-<span class="co"># # </span>
-<span class="co"># # # получить безрисковкую ставку (1-летние ОФЗ)</span>
-<span class="co"># source(&#39;https://raw.githubusercontent.com/quantviews/CBR/master/codes_new/CBR_web.R&#39;)</span>
-<span class="co"># rf_rate &lt;- MosPrimeXML(start.date,end.date)</span>
-<span class="co"># rf_rate_d &lt;- (100+rf_rate$T1W)^(1/365)-1</span>
-
-<span class="kw">plot</span>(rf_rate_d, <span class="dt">main =</span> <span class="st">&#39;Безрисковая ставка (Mosprime)&#39;</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># OnDate &lt;- start.date &lt;- as.Date(&#39;2010-01-01&#39;)</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co"># ToDate &lt;- end.date &lt;- Sys.Date()</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="co"># ROSN &lt;- QuantTools::get_finam_data(&#39;ROSN&#39;, from = start.date, to = end.date) # индекс ММВБ</span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="co"># ROSN &lt;- quant_tools_to_xts(ROSN)</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co"># MICEX &lt;- QuantTools::get_finam_data(&#39;MICEX&#39;, from = start.date, to = end.date) # индекс ММВБ</span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="co"># MICEX &lt;- quant_tools_to_xts(MICEX)</span></a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="co"># ROSN.rtn &lt;- diff(log(ROSN$close))</span></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="co"># MICEX.rtn &lt;- diff(log(MICEX$close))</span></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="co"># #</span></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="co"># # # получить безрисковкую ставку (1-летние ОФЗ)</span></a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="co"># source(&#39;https://raw.githubusercontent.com/quantviews/CBR/master/codes_new/CBR_web.R&#39;)</span></a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="co"># rf_rate &lt;- MosPrimeXML(start.date,end.date)</span></a>
+<a class="sourceLine" id="cb1-13" title="13"><span class="co"># rf_rate_d &lt;- (100+rf_rate$T1W)^(1/365)-1</span></a>
+<a class="sourceLine" id="cb1-14" title="14"></a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="kw">plot</span>(rf_rate_d, <span class="dt">main =</span> <span class="st">&#39;Безрисковая ставка (Mosprime)&#39;</span>)</a></code></pre></div>
 <p><img src="lecture-8_files/figure-slidy/unnamed-chunk-3-1.png" width="1152" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ex_rosn_rtns &lt;-<span class="st"> </span>ROSN.rtn <span class="op">-</span><span class="st"> </span>rf_rate_d
-ex_micex_rtns &lt;-<span class="st"> </span>MICEX.rtn <span class="op">-</span><span class="st"> </span>rf_rate_d
-
-fit &lt;-<span class="st"> </span><span class="kw">lm</span>(ex_rosn_rtns <span class="op">~</span><span class="st"> </span>ex_micex_rtns)
-<span class="kw">summary</span>(fit)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">ex_rosn_rtns &lt;-<span class="st"> </span>ROSN.rtn <span class="op">-</span><span class="st"> </span>rf_rate_d</a>
+<a class="sourceLine" id="cb2-2" title="2">ex_micex_rtns &lt;-<span class="st"> </span>MICEX.rtn <span class="op">-</span><span class="st"> </span>rf_rate_d</a>
+<a class="sourceLine" id="cb2-3" title="3"></a>
+<a class="sourceLine" id="cb2-4" title="4">fit &lt;-<span class="st"> </span><span class="kw">lm</span>(ex_rosn_rtns <span class="op">~</span><span class="st"> </span>ex_micex_rtns)</a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="kw">summary</span>(fit)</a></code></pre></div>
 <pre><code>
 Call:
 lm(formula = ex_rosn_rtns ~ ex_micex_rtns)
 
 Residuals:
       Min        1Q    Median        3Q       Max 
--0.051107 -0.007255 -0.000836  0.006392  0.103810 
+-0.049263 -0.006654 -0.000592  0.005909  0.059315 
 
 Coefficients:
-               Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)   0.0013127  0.0002704   4.854 1.27e-06 ***
-ex_micex_rtns 1.0966439  0.0115938  94.589  &lt; 2e-16 ***
+                Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   -5.295e-05  3.184e-04  -0.166    0.868    
+ex_micex_rtns  1.001e+00  1.824e-02  54.886   &lt;2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 0.01232 on 2978 degrees of freedom
-  (28 observations deleted due to missingness)
-Multiple R-squared:  0.7503,    Adjusted R-squared:  0.7502 
-F-statistic:  8947 on 1 and 2978 DF,  p-value: &lt; 2.2e-16</code></pre>
+Residual standard error: 0.01091 on 2486 degrees of freedom
+  (21 observations deleted due to missingness)
+Multiple R-squared:  0.5479,    Adjusted R-squared:  0.5477 
+F-statistic:  3012 on 1 and 2486 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Интерпретация:</p>
 <ol style="list-style-type: decimal">
 <li><p>Значение t-статистики при константе равно 0,24. Мы не можем отвергнуть гипотезу о том, что значение коэффициента не равно нулю.</p></li>
@@ -257,64 +284,64 @@ F-statistic:  8947 on 1 and 2978 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li><p>R^2 = 0,59. Это означает, что 58% дисперсии доходности Роснефти “объясняется” динамикой широкого рынка, 41% – дисперсии объясняется специфическими факторами.</p></li>
 </ol>
 </div>
-<div id="---r-2" class="slide section level2">
-<h2>Расчет беты в R – 2</h2>
+<div id="расчет-беты-в-r-2" class="slide section level2">
+<h1>Расчет беты в R – 2</h1>
 <p>рассмотрим вариант расчет регрессии без свободного члена (intercept term). В R такое уравнение рассчитывается добавлением параметра <code>+0</code> в формуле.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit0 &lt;-<span class="st"> </span><span class="kw">lm</span>(ex_rosn_rtns <span class="op">~</span><span class="st"> </span>ex_micex_rtns <span class="op">+</span><span class="st"> </span><span class="dv">0</span>)
-<span class="kw">summary</span>(fit0)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">fit0 &lt;-<span class="st"> </span><span class="kw">lm</span>(ex_rosn_rtns <span class="op">~</span><span class="st"> </span>ex_micex_rtns <span class="op">+</span><span class="st"> </span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw">summary</span>(fit0)</a></code></pre></div>
 <pre><code>
 Call:
 lm(formula = ex_rosn_rtns ~ ex_micex_rtns + 0)
 
 Residuals:
       Min        1Q    Median        3Q       Max 
--0.053496 -0.006225  0.000014  0.007282  0.112550 
+-0.049291 -0.006688 -0.000608  0.005873  0.059543 
 
 Coefficients:
               Estimate Std. Error t value Pr(&gt;|t|)    
-ex_micex_rtns 1.065613   0.009709   109.8   &lt;2e-16 ***
+ex_micex_rtns  1.00329    0.01252   80.11   &lt;2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 0.01236 on 2979 degrees of freedom
-  (28 observations deleted due to missingness)
-Multiple R-squared:  0.8017,    Adjusted R-squared:  0.8017 
-F-statistic: 1.205e+04 on 1 and 2979 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(xts)</code></pre></div>
+Residual standard error: 0.0109 on 2487 degrees of freedom
+  (21 observations deleted due to missingness)
+Multiple R-squared:  0.7207,    Adjusted R-squared:  0.7206 
+F-statistic:  6418 on 1 and 2487 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">library</span>(xts)</a></code></pre></div>
 <pre><code>Loading required package: zoo</code></pre>
 <pre><code>
 Attaching package: &#39;zoo&#39;</code></pre>
 <pre><code>The following objects are masked from &#39;package:base&#39;:
 
     as.Date, as.Date.numeric</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">coredata</span>(ex_micex_rtns), <span class="kw">coredata</span>(ex_rosn_rtns), 
-     <span class="dt">xlab =</span> <span class="st">&#39;избыточная доходность индекса ММВБ&#39;</span>, <span class="dt">ylab =</span> <span class="st">&#39;избыточная доходность Роснефти&#39;</span>)
-<span class="kw">abline</span>(<span class="kw">lm</span>(ex_rosn_rtns <span class="op">~</span><span class="st"> </span>ex_micex_rtns <span class="op">+</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">plot</span>(<span class="kw">coredata</span>(ex_micex_rtns), <span class="kw">coredata</span>(ex_rosn_rtns), </a>
+<a class="sourceLine" id="cb10-2" title="2">     <span class="dt">xlab =</span> <span class="st">&#39;избыточная доходность индекса ММВБ&#39;</span>, <span class="dt">ylab =</span> <span class="st">&#39;избыточная доходность Роснефти&#39;</span>)</a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="kw">abline</span>(<span class="kw">lm</span>(ex_rosn_rtns <span class="op">~</span><span class="st"> </span>ex_micex_rtns <span class="op">+</span><span class="st"> </span><span class="dv">0</span>), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <p><img src="lecture-8_files/figure-slidy/unnamed-chunk-4-1.png" width="1152" style="display: block; margin: auto;" /></p>
 </div>
-<div id="-beta----performanceanalytics" class="slide section level2">
-<h2>Расчет <span class="math inline">\(\beta\)</span> с помощью пакета PerformanceAnalytics</h2>
+<div id="расчет-beta-с-помощью-пакета-performanceanalytics" class="slide section level2">
+<h1>Расчет <span class="math inline">\(\beta\)</span> с помощью пакета PerformanceAnalytics</h1>
 <p>Пакет <code>PerformanceAnalytics</code> предоставляет удобные функции для расчета различных параметров модели CAPM:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(PerformanceAnalytics)
-
-<span class="kw">CAPM.beta</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d)</code></pre></div>
-<pre><code>[1] 1.094767</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">CAPM.alpha</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d)</code></pre></div>
-<pre><code>[1] 0.001258904</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">library</span>(PerformanceAnalytics)</a>
+<a class="sourceLine" id="cb11-2" title="2"></a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="kw">CAPM.beta</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d)</a></code></pre></div>
+<pre><code>[1] 0.9984783</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">CAPM.alpha</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d)</a></code></pre></div>
+<pre><code>[1] -0.0001168208</code></pre>
 </div>
-<div id="---rolling-beta----performanceanalytics" class="slide section level2">
-<h2>Расчет скользящей беты (rolling <span class="math inline">\(\beta\)</span>) с помощью пакета PerformanceAnalytics</h2>
+<div id="расчет-скользящей-беты-rolling-beta-с-помощью-пакета-performanceanalytics" class="slide section level2">
+<h1>Расчет скользящей беты (rolling <span class="math inline">\(\beta\)</span>) с помощью пакета PerformanceAnalytics</h1>
 <p>Пакет <code>PerformanceAnalytics</code> дает возможность быстро делать “скользящие” оценки коэффициентов – то есть мы каждый раз используем лишь X предыдущих значений для расчетов (в данном случаем X = 250, это примерно расчет за последние 365 календарных дней)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chart.RollingRegression</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d,<span class="dt">width =</span> <span class="dv">250</span>, <span class="dt">attribute =</span> <span class="st">&quot;Beta&quot;</span>,
-                        <span class="dt">main =</span> <span class="st">&#39;Скользящая бета для акций Роснефти&#39;</span>)</code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">chart.RollingRegression</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d,<span class="dt">width =</span> <span class="dv">250</span>, <span class="dt">attribute =</span> <span class="st">&quot;Beta&quot;</span>,</a>
+<a class="sourceLine" id="cb15-2" title="2">                        <span class="dt">main =</span> <span class="st">&#39;Скользящая бета для акций Роснефти&#39;</span>)</a></code></pre></div>
 <p><img src="lecture-8_files/figure-slidy/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chart.RollingRegression</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d,<span class="dt">width =</span> <span class="dv">250</span>, <span class="dt">attribute =</span> <span class="st">&quot;Alpha&quot;</span>,
-                        <span class="dt">main =</span> <span class="st">&#39;Скользящая альфа для акций Роснефти&#39;</span>)</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">chart.RollingRegression</span>(<span class="dt">Ra =</span> ROSN.rtn,<span class="dt">Rb =</span> MICEX.rtn,<span class="dt">Rf =</span> rf_rate_d,<span class="dt">width =</span> <span class="dv">250</span>, <span class="dt">attribute =</span> <span class="st">&quot;Alpha&quot;</span>,</a>
+<a class="sourceLine" id="cb16-2" title="2">                        <span class="dt">main =</span> <span class="st">&#39;Скользящая альфа для акций Роснефти&#39;</span>)</a></code></pre></div>
 <p><img src="lecture-8_files/figure-slidy/unnamed-chunk-6-2.png" width="1152" style="display: block; margin: auto;" /></p>
 <p>Одна из проблем с использованием CAPM – по факту оценки коэффициентов не являются устойчивыми во времени.</p>
 </div>
-<div id="-" class="slide section level2">
-<h2>Интепретация альфы</h2>
+<div id="интепретация-альфы" class="slide section level2">
+<h1>Интепретация альфы</h1>
 <ul>
 <li>Разность между ожидаемой доходностью ценной бумаги (или портфеля бумаг) и соответствующей точкой на линии доходности SML называется <strong>коэффициентом альфа – <span class="math inline">\(\alpha\)</span></strong>.</li>
 </ul>
@@ -328,8 +355,8 @@ Attaching package: &#39;zoo&#39;</code></pre>
 <p><span class="math inline">\(E(r)= r_f+\beta[E(r_M)-r_f] = 6 + 1,2(14-6) = 15,6%\)</span>.</p>
 <p>Если мы считаем, что на самом деле ожидаемая доходность бумаги равна 17%, тогда альфа будет равно 1,4%</p>
 </div>
-<div id="------" class="slide section level2">
-<h2>Альфа как мера оценки эффективности портфельных управляющих</h2>
+<div id="альфа-как-мера-оценки-эффективности-портфельных-управляющих" class="slide section level2">
+<h1>Альфа как мера оценки эффективности портфельных управляющих</h1>
 <ul>
 <li>Альфа может использоваться для оценки и сравнения различных портфельных управляющих, которые формируют и управляют инвестиционными портфелями.</li>
 <li>Если управляющий может работать так, чтобы значение альфа его портфеля было постоянно положительным, то его работа оценивается как отличная.</li>
@@ -337,8 +364,8 @@ Attaching package: &#39;zoo&#39;</code></pre>
 <li>К сожалению, исследования показывают, что большинство портфельных управляющих имеют отрицательное значение альфа (за вычетом расходов и комиссий за управление)</li>
 </ul>
 </div>
-<div id="-capm-----" class="slide section level2">
-<h2>Использование CAPM для формирования портфеля ценных бумаг</h2>
+<div id="использование-capm-для-формирования-портфеля-ценных-бумаг" class="slide section level2">
+<h1>Использование CAPM для формирования портфеля ценных бумаг</h1>
 <p>CAPM говорит, что оптимальный алгоритм для инвестирования заключается в следующем:</p>
 <ol style="list-style-type: decimal">
 <li>Определите, какой уровень риска является для вас приемлемым (<span class="math inline">\(0\leq \sigma_P \leq \sigma_M\)</span>) – в принципе, мы можем определить уровень риска больше, чем рыночный, если есть возможность занять деньги, чтобы инвестировать в рисковый актив.</li>
@@ -347,8 +374,8 @@ Attaching package: &#39;zoo&#39;</code></pre>
 <li>Инвестируйте долю <span class="math inline">\(1-w\)</span> вашего капитала в безрисковый актив.</li>
 </ol>
 </div>
-<div id="-capm----" class="slide section level2">
-<h2>Использование CAPM для оценки стоимости капитала</h2>
+<div id="использование-capm-для-оценки-стоимости-капитала" class="slide section level2">
+<h1>Использование CAPM для оценки стоимости капитала</h1>
 <ul>
 <li>CAPM стандартно используется для оценки стоимости собственного капитала и расчета WACC – средневзвешенной стоимости капитала фирмы.</li>
 </ul>
@@ -364,8 +391,8 @@ Attaching package: &#39;zoo&#39;</code></pre>
 <li>Модель CAPM используется для оценки справедливого уровня доходности собственного капитала в регулируемых отраслях экономике (к примеру, при расчете величины тарифа).</li>
 </ul>
 </div>
-<div id="--capm" class="slide section level2">
-<h2>Проблемы с CAPM</h2>
+<div id="проблемы-с-capm" class="slide section level2">
+<h1>Проблемы с CAPM</h1>
 <ul>
 <li>Теория CAMP очень красива и элегантна, но есть существенные проблемы с ее эмпирической поддержкой. Дальнейшие исследования показали, что связь между бетой и ожидаемой доходностью слишком “плоская”.</li>
 <li>Активы с низкой бетой имеют “чересчур” высокие значения ожидаемой доходности, активы с высокой бетой – чересчур низкое.</li>
@@ -376,8 +403,8 @@ Attaching package: &#39;zoo&#39;</code></pre>
 <p>Источник: <a href="http://faculty.chicagobooth.edu/finance/papers/capm2004a.pdf">The Capital Asset Pricing Model: Theory and Evidence (Eugene F. Fama and Kenneth R. French)</a></p>
 <p>Настоящие портфели имеют плоское соотношение между бетой и ожидаемой доходностью.</p>
 </div>
-<div id="----" class="slide section level2">
-<h2>Трехфакторная модель Фамы и Френча</h2>
+<div id="трехфакторная-модель-фамы-и-френча" class="slide section level2">
+<h1>Трехфакторная модель Фамы и Френча</h1>
 <ul>
 <li>В ответ на эмпирические проблемы CAPM, Eugene Fama и Kenneth French предложили с 1992 году ее модификацию - так называемую трех-факторную модель Fama-French model.</li>
 </ul>
@@ -392,13 +419,13 @@ Attaching package: &#39;zoo&#39;</code></pre>
 <p><img src="fig/The_Cross-Section_of_Expected_Stock_Returns.png" width="394" height="299" /></p>
 </div>
 </div>
-<div id="----fama-french" class="slide section level2">
-<h2>Текущие значения параметров модели Fama &amp; French</h2>
+<div id="текущие-значения-параметров-модели-fama-french" class="slide section level2">
+<h1>Текущие значения параметров модели Fama &amp; French</h1>
 <iframe width="800" height="600" src="http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html" frameborder="0" allowfullscreen>
 </iframe>
 </div>
-<div id="--" class="slide section level2">
-<h2>Список использованных источников</h2>
+<div id="список-использованных-источников" class="slide section level2">
+<h1>Список использованных источников</h1>
 <ol style="list-style-type: decimal">
 <li>“Statistics and Data Analysis for Financial Engineering” (David Ruppert &amp; David Matteson)</li>
 <li>Analyzing Financial Data and Implementing Financial Models Using R (Clifford Ang).</li>
